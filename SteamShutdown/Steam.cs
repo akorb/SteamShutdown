@@ -4,22 +4,32 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SteamShutdown
 {
     public static partial class Steam
     {
         static string InstallationPath;
-        static string DownloadingPath;
         static string[] LibraryPaths;
 
-        public static List<AppInfo> Apps { get; private set; }
+        public static List<AppInfo> Apps { get; private set; } = new List<AppInfo>();
 
         static Steam()
         {
-            InstallationPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", null).ToString();
-            DownloadingPath = Path.Combine(InstallationPath, "SteamApps", "downloading");
+            InstallationPath = Registry.GetValue(GetSteamRegistryPath(), "InstallPath", "") as string;
+            if (InstallationPath == null)
+            {
+                MessageBox.Show("Steam is not installed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             LibraryPaths = GetLibraryPaths();
+            if (LibraryPaths.Length == 0)
+            {
+                MessageBox.Show("No game library found.\r\nThis might appear if Steam has been installed on this machine but was uninstalled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             UpdateAppInfos();
 
@@ -68,10 +78,12 @@ namespace SteamShutdown
 
         private static AppInfo JsonToAppInfo(dynamic json)
         {
-            AppInfo newInfo = new AppInfo();
-            newInfo.ID = int.Parse(json.appID.ToString());
-            newInfo.Name = json.name ?? json.installdir;
-            newInfo.State = int.Parse(json.StateFlags.ToString());
+            AppInfo newInfo = new AppInfo
+            {
+                ID = int.Parse(json.appID.ToString()),
+                Name = json.name ?? json.installdir,
+                State = int.Parse(json.StateFlags.ToString())
+            };
 
             if (json.StateFlags == 1062)
             {
@@ -106,19 +118,22 @@ namespace SteamShutdown
 
         private static string[] GetLibraryPaths()
         {
-            List<String> paths = new List<string>()
+            List<String> paths = new List<string>
                 {
                     Path.Combine(InstallationPath, "SteamApps")
                 };
 
             String libraryFoldersPath = Path.Combine(InstallationPath, "SteamApps", "libraryfolders.vdf");
 
+            if (!Directory.Exists(libraryFoldersPath))
+                return new string[0];
+
             String json = AcfToJson(File.ReadAllLines(libraryFoldersPath).ToList());
 
 
             dynamic stuff = JsonConvert.DeserializeObject(json);
 
-            for (int i = 1; true; i++)
+            for (int i = 1; ; i++)
             {
                 dynamic path = stuff[i.ToString()];
 
@@ -127,6 +142,18 @@ namespace SteamShutdown
             }
 
             return paths.ToArray();
+        }
+
+        private static string GetSteamRegistryPath()
+        {
+            const string start = @"HKEY_LOCAL_MACHINE\SOFTWARE\";
+            if (Environment.Is64BitOperatingSystem)
+            {
+                return start + @"Wow6432Node\Valve\Steam";
+            }
+
+            // 32 bit
+            return start + @"Valve\Steam";
         }
     }
 }
