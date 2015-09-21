@@ -12,6 +12,12 @@ namespace SteamShutdown
 
             clbDownloadingGames.Items.AddRange(Steam.Apps.Where(x => x.State == 1026).ToArray());
 
+            // Check all
+            for (int i = 0; i < clbDownloadingGames.Items.Count; i++)
+            {
+                clbDownloadingGames.SetItemChecked(i, true);
+            }
+
             Steam.AppInfoChanged += Steam_AppInfoChanged;
             Steam.AppInfoDeleted += Steam_AppInfoDeleted;
         }
