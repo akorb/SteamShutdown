@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -6,21 +7,56 @@ namespace SteamShutdown
 {
     public partial class Main : Form
     {
+        ListBox focused;
+        ListBox unfocused;
+
+        // 1042 = queued
         public Main()
         {
             InitializeComponent();
 
-            clbDownloadingGames.Items.AddRange(Steam.Apps.Where(x => x.State == 1026).ToArray());
+            lbDownloading.GotFocus += listBox_GotFocus;
+            lbWatching.GotFocus += listBox_GotFocus;
 
-            // Check all
-            for (int i = 0; i < clbDownloadingGames.Items.Count; i++)
-            {
-                clbDownloadingGames.SetItemChecked(i, true);
-            }
+            lbDownloading.Items.AddRange(Steam.Apps.Where(x => x.State == 1026).ToArray());
 
             Steam.AppInfoChanged += Steam_AppInfoChanged;
             Steam.AppInfoDeleted += Steam_AppInfoDeleted;
         }
+
+        private void UpdateFocused(ListBox listbox)
+        {
+            focused = listbox;
+
+            if (listbox == lbDownloading)
+                unfocused = lbWatching;
+            else if (listbox == lbWatching)
+                unfocused = lbDownloading;
+        }
+
+        private void listBox_GotFocus(object sender, EventArgs e)
+        {
+            UpdateFocused((ListBox)sender);
+
+            unfocused.ClearSelected();
+
+            if (focused == lbDownloading)
+                btnSwitch.Text = ">>";
+            else if (focused == lbWatching)
+                btnSwitch.Text = "<<";
+        }
+
+        private void SwitchItems(object[] items, ListBox from, ListBox to)
+        {
+            foreach (object item in items)
+            {
+                from.Items.Remove(item);
+            }
+
+            to.Items.AddRange(items);
+        }
+
+
 
         private void Steam_AppInfoDeleted(AppInfoEventArgs e)
         {
@@ -30,7 +66,10 @@ namespace SteamShutdown
                 return;
             }
 
-            clbDownloadingGames.Items.Remove(e.AppInfo);
+            if (lbDownloading.Items.Contains(e.AppInfo))
+                lbDownloading.Items.Remove(e.AppInfo);
+            else if (lbWatching.Items.Contains(e.AppInfo))
+                lbWatching.Items.Remove(e.AppInfo);
         }
 
         private void Steam_AppInfoChanged(AppInfoChangedEventArgs e)
@@ -41,22 +80,30 @@ namespace SteamShutdown
                 return;
             }
 
-            if (clbDownloadingGames.CheckedItems.Count > 0)
+            if (lbWatching.Items.Count > 0)
             {
-                bool doShutdown = clbDownloadingGames.CheckedItems.Cast<AppInfo>().All(x => x.State != 1026);
+                bool doShutdown = lbWatching.Items.Cast<AppInfo>().All(x => x.State != 1026);
 
                 if (doShutdown)
                     Shutdown();
             }
 
-            if (e.AppInfo.State == 1026 && !clbDownloadingGames.Items.Contains(e.AppInfo))
+            if (e.AppInfo.State == 1026 && !lbDownloading.Items.Contains(e.AppInfo))
             {
-                clbDownloadingGames.Items.Add(e.AppInfo);
+                lbDownloading.Items.Add(e.AppInfo);
             }
-            else if (e.PreviousState == 1026 && e.AppInfo.State != 1026 && clbDownloadingGames.Items.Contains(e.AppInfo))
+            else if (e.PreviousState == 1026 && e.AppInfo.State != 1026)
             {
-                clbDownloadingGames.Items.Remove(e.AppInfo);
+                if (lbWatching.Items.Contains(e.AppInfo))
+                    lbWatching.Items.Remove(e.AppInfo);
+                else if (lbDownloading.Items.Contains(e.AppInfo))
+                    lbDownloading.Items.Remove(e.AppInfo);
             }
+        }
+
+        private void btnSwitch_Click(object sender, EventArgs e)
+        {
+            SwitchItems(focused.SelectedItems.Cast<object>().ToArray(), focused, unfocused);
         }
 
         private void Shutdown()
