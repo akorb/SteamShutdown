@@ -85,6 +85,7 @@ namespace SteamShutdown
                 State = int.Parse(json.StateFlags.ToString())
             };
 
+
             if (json.StateFlags == 1062)
             {
                 newInfo.State = 1026;
@@ -113,22 +114,19 @@ namespace SteamShutdown
                         acfLines[i] += ":";
             }
 
-            return String.Join("", acfLines);
+            return string.Join("", acfLines);
         }
 
         private static string[] GetLibraryPaths()
         {
-            List<String> paths = new List<string>
+            List<string> paths = new List<string>()
                 {
                     Path.Combine(InstallationPath, "SteamApps")
                 };
 
-            String libraryFoldersPath = Path.Combine(InstallationPath, "SteamApps", "libraryfolders.vdf");
+            string libraryFoldersPath = Path.Combine(InstallationPath, "SteamApps", "libraryfolders.vdf");
 
-            if (!Directory.Exists(libraryFoldersPath))
-                return new string[0];
-
-            String json = AcfToJson(File.ReadAllLines(libraryFoldersPath).ToList());
+            string json = AcfToJson(File.ReadAllLines(libraryFoldersPath).ToList());
 
 
             dynamic stuff = JsonConvert.DeserializeObject(json);
