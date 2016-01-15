@@ -28,20 +28,20 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.lbDownloading = new System.Windows.Forms.ListBox();
+            this.lbUnwatched = new System.Windows.Forms.ListBox();
             this.lbWatching = new System.Windows.Forms.ListBox();
             this.btnSwitch = new System.Windows.Forms.Button();
-            this.lblDownloading = new System.Windows.Forms.Label();
+            this.lblUnwatched = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // lbDownloading
+            // lbUnwatched
             // 
-            this.lbDownloading.FormattingEnabled = true;
-            this.lbDownloading.Location = new System.Drawing.Point(12, 41);
-            this.lbDownloading.Name = "lbDownloading";
-            this.lbDownloading.Size = new System.Drawing.Size(168, 290);
-            this.lbDownloading.TabIndex = 0;
+            this.lbUnwatched.FormattingEnabled = true;
+            this.lbUnwatched.Location = new System.Drawing.Point(12, 41);
+            this.lbUnwatched.Name = "lbUnwatched";
+            this.lbUnwatched.Size = new System.Drawing.Size(168, 290);
+            this.lbUnwatched.TabIndex = 0;
             // 
             // lbWatching
             // 
@@ -62,15 +62,15 @@
             this.btnSwitch.UseVisualStyleBackColor = true;
             this.btnSwitch.Click += new System.EventHandler(this.btnSwitch_Click);
             // 
-            // lblDownloading
+            // lblUnwatched
             // 
-            this.lblDownloading.AutoSize = true;
-            this.lblDownloading.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDownloading.Location = new System.Drawing.Point(8, 16);
-            this.lblDownloading.Name = "lblDownloading";
-            this.lblDownloading.Size = new System.Drawing.Size(113, 20);
-            this.lblDownloading.TabIndex = 4;
-            this.lblDownloading.Text = "All Downloads:";
+            this.lblUnwatched.AutoSize = true;
+            this.lblUnwatched.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUnwatched.Location = new System.Drawing.Point(8, 16);
+            this.lblUnwatched.Name = "lblUnwatched";
+            this.lblUnwatched.Size = new System.Drawing.Size(94, 20);
+            this.lblUnwatched.TabIndex = 4;
+            this.lblUnwatched.Text = "Unwatched:";
             // 
             // label1
             // 
@@ -88,10 +88,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(482, 346);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lblDownloading);
+            this.Controls.Add(this.lblUnwatched);
             this.Controls.Add(this.btnSwitch);
             this.Controls.Add(this.lbWatching);
-            this.Controls.Add(this.lbDownloading);
+            this.Controls.Add(this.lbUnwatched);
             this.Name = "Main";
             this.ShowIcon = false;
             this.Text = "Steam Shutdown";
@@ -102,10 +102,10 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox lbDownloading;
+        private System.Windows.Forms.ListBox lbUnwatched;
         private System.Windows.Forms.ListBox lbWatching;
         private System.Windows.Forms.Button btnSwitch;
-        private System.Windows.Forms.Label lblDownloading;
+        private System.Windows.Forms.Label lblUnwatched;
         private System.Windows.Forms.Label label1;
     }
 }

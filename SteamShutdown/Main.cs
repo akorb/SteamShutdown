@@ -15,10 +15,10 @@ namespace SteamShutdown
         {
             InitializeComponent();
 
-            lbDownloading.GotFocus += listBox_GotFocus;
+            lbUnwatched.GotFocus += listBox_GotFocus;
             lbWatching.GotFocus += listBox_GotFocus;
 
-            lbDownloading.Items.AddRange(Steam.Apps.Where(x => x.State == 1026).ToArray());
+            lbUnwatched.Items.AddRange(Steam.Apps.Where(x => x.State == 1026).ToArray());
 
             Steam.AppInfoChanged += Steam_AppInfoChanged;
             Steam.AppInfoDeleted += Steam_AppInfoDeleted;
@@ -28,10 +28,10 @@ namespace SteamShutdown
         {
             focused = listbox;
 
-            if (listbox == lbDownloading)
+            if (listbox == lbUnwatched)
                 unfocused = lbWatching;
             else if (listbox == lbWatching)
-                unfocused = lbDownloading;
+                unfocused = lbUnwatched;
         }
 
         private void listBox_GotFocus(object sender, EventArgs e)
@@ -40,7 +40,7 @@ namespace SteamShutdown
 
             unfocused.ClearSelected();
 
-            if (focused == lbDownloading)
+            if (focused == lbUnwatched)
                 btnSwitch.Text = ">>";
             else if (focused == lbWatching)
                 btnSwitch.Text = "<<";
@@ -66,8 +66,8 @@ namespace SteamShutdown
                 return;
             }
 
-            if (lbDownloading.Items.Contains(e.AppInfo))
-                lbDownloading.Items.Remove(e.AppInfo);
+            if (lbUnwatched.Items.Contains(e.AppInfo))
+                lbUnwatched.Items.Remove(e.AppInfo);
             else if (lbWatching.Items.Contains(e.AppInfo))
                 lbWatching.Items.Remove(e.AppInfo);
         }
@@ -88,16 +88,16 @@ namespace SteamShutdown
                     Shutdown();
             }
 
-            if (e.AppInfo.State == 1026 && !lbDownloading.Items.Contains(e.AppInfo))
+            if (e.AppInfo.State == 1026 && !lbUnwatched.Items.Contains(e.AppInfo))
             {
-                lbDownloading.Items.Add(e.AppInfo);
+                lbUnwatched.Items.Add(e.AppInfo);
             }
             else if (e.PreviousState == 1026 && e.AppInfo.State != 1026)
             {
                 if (lbWatching.Items.Contains(e.AppInfo))
                     lbWatching.Items.Remove(e.AppInfo);
-                else if (lbDownloading.Items.Contains(e.AppInfo))
-                    lbDownloading.Items.Remove(e.AppInfo);
+                else if (lbUnwatched.Items.Contains(e.AppInfo))
+                    lbUnwatched.Items.Remove(e.AppInfo);
             }
         }
 
