@@ -52,16 +52,17 @@ namespace SteamShutdown
 
             dynamic newJson = JsonConvert.DeserializeObject(json);
 
+            // Search for changed app, if null it's a new app
             AppInfo info = Apps.FirstOrDefault(x => x.ID == int.Parse(newJson.appID.ToString()));
             AppInfoChangedEventArgs eventArgs;
 
-            if (info != null)
+            if (info != null) // Download state changed
             {
                 eventArgs = new AppInfoChangedEventArgs(info, info.State);
                 // Only update existing AppInfo
                 info.State = int.Parse(newJson.StateFlags.ToString());
             }
-            else
+            else // New download started
             {
                 // Add new AppInfo
                 info = JsonToAppInfo(newJson);
