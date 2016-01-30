@@ -42,7 +42,7 @@
             this.lbUnwatched.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbUnwatched.FormattingEnabled = true;
             this.lbUnwatched.ItemHeight = 20;
-            this.lbUnwatched.Location = new System.Drawing.Point(12, 41);
+            this.lbUnwatched.Location = new System.Drawing.Point(13, 44);
             this.lbUnwatched.Name = "lbUnwatched";
             this.lbUnwatched.Size = new System.Drawing.Size(168, 284);
             this.lbUnwatched.TabIndex = 0;
@@ -52,7 +52,7 @@
             this.lbWatching.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbWatching.FormattingEnabled = true;
             this.lbWatching.ItemHeight = 20;
-            this.lbWatching.Location = new System.Drawing.Point(301, 41);
+            this.lbWatching.Location = new System.Drawing.Point(302, 44);
             this.lbWatching.Name = "lbWatching";
             this.lbWatching.Size = new System.Drawing.Size(168, 284);
             this.lbWatching.TabIndex = 1;
@@ -72,7 +72,7 @@
             // 
             this.lblUnwatched.AutoSize = true;
             this.lblUnwatched.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUnwatched.Location = new System.Drawing.Point(8, 16);
+            this.lblUnwatched.Location = new System.Drawing.Point(9, 19);
             this.lblUnwatched.Name = "lblUnwatched";
             this.lblUnwatched.Size = new System.Drawing.Size(94, 20);
             this.lblUnwatched.TabIndex = 4;
@@ -82,7 +82,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(297, 16);
+            this.label1.Location = new System.Drawing.Point(298, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 20);
             this.label1.TabIndex = 5;
@@ -91,7 +91,7 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.btnSwitch);
-            this.panel1.Location = new System.Drawing.Point(186, 41);
+            this.panel1.Location = new System.Drawing.Point(187, 44);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(109, 284);
             this.panel1.TabIndex = 6;
