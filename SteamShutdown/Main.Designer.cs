@@ -33,28 +33,34 @@
             this.btnSwitch = new System.Windows.Forms.Button();
             this.lblUnwatched = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lbUnwatched
             // 
+            this.lbUnwatched.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbUnwatched.FormattingEnabled = true;
+            this.lbUnwatched.ItemHeight = 20;
             this.lbUnwatched.Location = new System.Drawing.Point(12, 41);
             this.lbUnwatched.Name = "lbUnwatched";
-            this.lbUnwatched.Size = new System.Drawing.Size(168, 290);
+            this.lbUnwatched.Size = new System.Drawing.Size(168, 284);
             this.lbUnwatched.TabIndex = 0;
             // 
             // lbWatching
             // 
+            this.lbWatching.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbWatching.FormattingEnabled = true;
+            this.lbWatching.ItemHeight = 20;
             this.lbWatching.Location = new System.Drawing.Point(301, 41);
             this.lbWatching.Name = "lbWatching";
-            this.lbWatching.Size = new System.Drawing.Size(168, 290);
+            this.lbWatching.Size = new System.Drawing.Size(168, 284);
             this.lbWatching.TabIndex = 1;
             // 
             // btnSwitch
             // 
             this.btnSwitch.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSwitch.Location = new System.Drawing.Point(203, 159);
+            this.btnSwitch.Location = new System.Drawing.Point(18, 120);
             this.btnSwitch.Name = "btnSwitch";
             this.btnSwitch.Size = new System.Drawing.Size(72, 45);
             this.btnSwitch.TabIndex = 2;
@@ -82,19 +88,30 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "Watching:";
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnSwitch);
+            this.panel1.Location = new System.Drawing.Point(186, 41);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(109, 284);
+            this.panel1.TabIndex = 6;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(482, 346);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblUnwatched);
-            this.Controls.Add(this.btnSwitch);
             this.Controls.Add(this.lbWatching);
             this.Controls.Add(this.lbUnwatched);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Main";
             this.ShowIcon = false;
             this.Text = "Steam Shutdown";
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -107,6 +124,7 @@
         private System.Windows.Forms.Button btnSwitch;
         private System.Windows.Forms.Label lblUnwatched;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
