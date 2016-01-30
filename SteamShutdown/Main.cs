@@ -18,7 +18,7 @@ namespace SteamShutdown
             lbUnwatched.GotFocus += listBox_GotFocus;
             lbWatching.GotFocus += listBox_GotFocus;
 
-            lbUnwatched.Items.AddRange(Steam.Apps.Where(x => x.State == 1026).ToArray());
+            lbUnwatched.Items.AddRange(Steam.Apps.Where(x => x.State == 1026 || x.State == 1042).ToArray());
 
             Steam.AppInfoChanged += Steam_AppInfoChanged;
             Steam.AppInfoDeleted += Steam_AppInfoDeleted;
