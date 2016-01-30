@@ -85,12 +85,6 @@ namespace SteamShutdown
                 State = int.Parse(json.StateFlags.ToString())
             };
 
-
-            if (json.StateFlags == 1062)
-            {
-                newInfo.State = 1026;
-            }
-
             return newInfo;
         }
 

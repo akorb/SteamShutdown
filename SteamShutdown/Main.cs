@@ -10,7 +10,6 @@ namespace SteamShutdown
         ListBox focused;
         ListBox unfocused;
 
-        // 1042 = queued
         public Main()
         {
             InitializeComponent();
@@ -18,7 +17,7 @@ namespace SteamShutdown
             lbUnwatched.GotFocus += listBox_GotFocus;
             lbWatching.GotFocus += listBox_GotFocus;
 
-            lbUnwatched.Items.AddRange(Steam.Apps.Where(x => x.State == 1026 || x.State == 1042).ToArray());
+            lbUnwatched.Items.AddRange(Steam.Apps.Where(x => x.IsDownloading).ToArray());
 
             Steam.AppInfoChanged += Steam_AppInfoChanged;
             Steam.AppInfoDeleted += Steam_AppInfoDeleted;
@@ -82,17 +81,17 @@ namespace SteamShutdown
 
             if (lbWatching.Items.Count > 0)
             {
-                bool doShutdown = lbWatching.Items.Cast<AppInfo>().All(x => x.State != 1026);
+                bool doShutdown = lbWatching.Items.Cast<AppInfo>().All(x => !x.IsDownloading);
 
                 if (doShutdown)
                     Shutdown();
             }
 
-            if (e.AppInfo.State == 1026 && !lbUnwatched.Items.Contains(e.AppInfo))
+            if (e.AppInfo.IsDownloading && !lbUnwatched.Items.Contains(e.AppInfo))
             {
                 lbUnwatched.Items.Add(e.AppInfo);
             }
-            else if (e.PreviousState == 1026 && e.AppInfo.State != 1026)
+            else if (AppInfo.CheckDownloading(e.PreviousState) && !e.AppInfo.IsDownloading)
             {
                 if (lbWatching.Items.Contains(e.AppInfo))
                     lbWatching.Items.Remove(e.AppInfo);
