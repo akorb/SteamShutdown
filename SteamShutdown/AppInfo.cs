@@ -13,7 +13,7 @@
 
         public static bool CheckDownloading(int appState)
         {
-            return appState == 1026 || appState == 1042 || appState == 1062;
+            return appState == 1026 || appState == 1042 || appState == 1062 || appState == 1030;
         }
 
         public override string ToString()
