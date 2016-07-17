@@ -8,7 +8,7 @@
 
         public bool IsDownloading
         {
-            get { return CheckDownloading(ID); }
+            get { return CheckDownloading(State); }
         }
 
         public static bool CheckDownloading(int appState)
