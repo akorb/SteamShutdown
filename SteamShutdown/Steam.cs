@@ -80,7 +80,7 @@ namespace SteamShutdown
         {
             AppInfo newInfo = new AppInfo
             {
-                ID = int.Parse((json.appid ?? json.appID).ToString()),
+                ID = int.Parse((json.appid ?? json.appID ?? json.AppID).ToString()),
                 Name = json.name ?? json.installdir,
                 State = int.Parse(json.StateFlags.ToString())
             };
