@@ -65,11 +65,14 @@ namespace SteamShutdown
                 {
                     string json = AcfToJson(File.ReadAllLines(fileInfo.FullName).ToList());
 
-                    dynamic stuff = JsonConvert.DeserializeObject(json);
+                    if (json.Length > 0)
+                    {
+                        dynamic stuff = JsonConvert.DeserializeObject(json);
+                        
+                        AppInfo ai = JsonToAppInfo(stuff);
 
-                    AppInfo ai = JsonToAppInfo(stuff);
-
-                    appInfos.Add(ai);
+                        appInfos.Add(ai);
+                    }
                 }
             }
 
