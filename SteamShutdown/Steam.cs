@@ -63,16 +63,12 @@ namespace SteamShutdown
 
                 foreach (FileInfo fileInfo in fileInfos)
                 {
+                    if (fileInfo.Length == 0) continue;
+
                     string json = AcfToJson(File.ReadAllLines(fileInfo.FullName).ToList());
-
-                    if (json.Length > 0)
-                    {
-                        dynamic stuff = JsonConvert.DeserializeObject(json);
-                        
-                        AppInfo ai = JsonToAppInfo(stuff);
-
-                        appInfos.Add(ai);
-                    }
+                    dynamic stuff = JsonConvert.DeserializeObject(json);
+                    AppInfo ai = JsonToAppInfo(stuff);
+                    appInfos.Add(ai);
                 }
             }
 
