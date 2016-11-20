@@ -63,7 +63,13 @@ namespace SteamShutdown
 
                 foreach (FileInfo fileInfo in fileInfos)
                 {
+                    // Skip if file is empty
                     if (fileInfo.Length == 0) continue;
+
+                    string[] content = File.ReadAllLines(fileInfo.FullName);
+
+                    // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
+                    if (string.IsNullOrWhiteSpace(content[0].TrimStart('\0'))) continue;
 
                     string json = AcfToJson(File.ReadAllLines(fileInfo.FullName).ToList());
                     dynamic stuff = JsonConvert.DeserializeObject(json);
