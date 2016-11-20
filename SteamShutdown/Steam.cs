@@ -71,7 +71,7 @@ namespace SteamShutdown
                     // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
                     if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0'))) continue;
 
-                    string json = AcfToJson(File.ReadAllLines(fileInfo.FullName).ToList());
+                    string json = AcfToJson(content.ToList());
                     dynamic stuff = JsonConvert.DeserializeObject(json);
                     AppInfo ai = JsonToAppInfo(stuff);
                     appInfos.Add(ai);
