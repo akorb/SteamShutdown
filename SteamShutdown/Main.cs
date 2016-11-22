@@ -87,7 +87,7 @@ namespace SteamShutdown
                     Shutdown();
             }
 
-            if (e.AppInfo.IsDownloading && !lbUnwatched.Items.Contains(e.AppInfo))
+            if (e.AppInfo.IsDownloading && !lbUnwatched.Items.Contains(e.AppInfo) && !lbWatching.Items.Contains(e.AppInfo))
             {
                 lbUnwatched.Items.Add(e.AppInfo);
             }
