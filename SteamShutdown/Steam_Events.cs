@@ -58,12 +58,15 @@ namespace SteamShutdown
                         System.Threading.Thread.Sleep(50);
                     }
                 }
-                while (counter++ == 5);
+                while (counter++ <= 5);
             }
             catch
             {
                 return;
             }
+
+            // Shouldn't happen, but might occur if Steam holds the acf file too long
+            if (json == null) return;
 
             dynamic newJson = JsonConvert.DeserializeObject(json);
             int newID = JsonToAppInfo(newJson).ID;
