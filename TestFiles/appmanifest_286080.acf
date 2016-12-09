@@ -1,0 +1,27 @@
+"AppState"
+{
+	"appid"		"286080"
+	"Universe"		"1"
+	"name"		"Thinking with Time Machine"
+	"StateFlags"		"4"
+	"installdir"		"Thinking with Time Machine"
+	"LastUpdated"		"1463862607"
+	"UpdateResult"		"0"
+	"SizeOnDisk"		"4640693647"
+	"buildid"		"859339"
+	"LastOwner"		"76561198030640421"
+	"BytesToDownload"		"2469233264"
+	"BytesDownloaded"		"2469233264"
+	"AutoUpdateBehavior"		"0"
+	"AllowOtherDownloadsWhileRunning"		"0"
+	"UserConfig"
+	{
+		"language"		"english"
+	}
+	"MountedDepots"
+	{
+		"286085"		"1758673198856925890"
+		"286081"		"1814445043793139169"
+		"286084"		"3800100249227735182"
+	}
+}
