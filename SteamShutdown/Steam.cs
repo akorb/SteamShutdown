@@ -66,19 +66,27 @@ namespace SteamShutdown
                     // Skip if file is empty
                     if (fileInfo.Length == 0) continue;
 
-                    string[] content = File.ReadAllLines(fileInfo.FullName);
+                    AppInfo ai = FileToAppInfo(fileInfo.FullName);
+                    if (ai == null) continue;
 
-                    // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
-                    if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0'))) continue;
-
-                    string json = AcfToJson(content.ToList());
-                    dynamic stuff = JsonConvert.DeserializeObject(json);
-                    AppInfo ai = JsonToAppInfo(stuff);
                     appInfos.Add(ai);
                 }
             }
 
             Apps = appInfos;
+        }
+
+        public static AppInfo FileToAppInfo(string filename)
+        {
+            string[] content = File.ReadAllLines(filename);
+
+            // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
+            if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0'))) return null;
+
+            string json = AcfToJson(content.ToList());
+            dynamic stuff = JsonConvert.DeserializeObject(json);
+            AppInfo ai = JsonToAppInfo(stuff);
+            return ai;
         }
 
         private static AppInfo JsonToAppInfo(dynamic json)
