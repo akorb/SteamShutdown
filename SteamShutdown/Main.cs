@@ -55,6 +55,12 @@ namespace SteamShutdown
             to.Items.AddRange(items);
         }
 
+        private void SwitchAllToWatching()
+        {
+            lbWatching.Items.AddRange(lbUnwatched.Items);
+            lbUnwatched.Items.Clear();
+        }
+
 
 
         private void Steam_AppInfoDeleted(AppInfoEventArgs e)
@@ -89,7 +95,10 @@ namespace SteamShutdown
 
             if (e.AppInfo.IsDownloading && !lbUnwatched.Items.Contains(e.AppInfo) && !lbWatching.Items.Contains(e.AppInfo))
             {
-                lbUnwatched.Items.Add(e.AppInfo);
+                if (cbAll.Checked)
+                    lbWatching.Items.Add(e.AppInfo);
+                else
+                    lbUnwatched.Items.Add(e.AppInfo);
             }
             else if (AppInfo.CheckDownloading(e.PreviousState) && !e.AppInfo.IsDownloading)
             {
@@ -103,6 +112,14 @@ namespace SteamShutdown
         private void btnSwitch_Click(object sender, EventArgs e)
         {
             SwitchItems(focused.SelectedItems.Cast<object>().ToArray(), focused, unfocused);
+        }
+
+        private void cbAll_CheckedChanged(object sender, EventArgs e)
+        {
+            panelMain.Enabled = !cbAll.Checked;
+
+            if (cbAll.Checked)
+                SwitchAllToWatching();
         }
 
         private void Shutdown()
