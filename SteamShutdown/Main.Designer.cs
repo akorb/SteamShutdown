@@ -36,6 +36,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.cbAll = new System.Windows.Forms.CheckBox();
             this.panelMain = new System.Windows.Forms.Panel();
+            this.lblMode = new System.Windows.Forms.Label();
+            this.cbModes = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.SuspendLayout();
@@ -125,11 +127,33 @@
             this.panelMain.Size = new System.Drawing.Size(464, 318);
             this.panelMain.TabIndex = 8;
             // 
+            // lblMode
+            // 
+            this.lblMode.AutoSize = true;
+            this.lblMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.lblMode.Location = new System.Drawing.Point(18, 336);
+            this.lblMode.Name = "lblMode";
+            this.lblMode.Size = new System.Drawing.Size(46, 18);
+            this.lblMode.TabIndex = 9;
+            this.lblMode.Text = "Mode";
+            // 
+            // cbModes
+            // 
+            this.cbModes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbModes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbModes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbModes.Location = new System.Drawing.Point(68, 332);
+            this.cbModes.Name = "cbModes";
+            this.cbModes.Size = new System.Drawing.Size(121, 28);
+            this.cbModes.TabIndex = 10;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(498, 369);
+            this.Controls.Add(this.cbModes);
+            this.Controls.Add(this.lblMode);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.cbAll);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -155,6 +179,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox cbAll;
         private System.Windows.Forms.Panel panelMain;
+        private System.Windows.Forms.Label lblMode;
+        private System.Windows.Forms.ComboBox cbModes;
     }
 }
 
