@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -13,6 +12,9 @@ namespace SteamShutdown
         public Main()
         {
             InitializeComponent();
+
+            cbModes.Items.AddRange(new Modes.Mode[] { new Modes.ShutdownMode(), new Modes.SleepMode() });
+            cbModes.SelectedIndex = 0;
 
             lbUnwatched.GotFocus += listBox_GotFocus;
             lbWatching.GotFocus += listBox_GotFocus;
@@ -124,10 +126,12 @@ namespace SteamShutdown
 
         private void Shutdown()
         {
+            var mode = (Modes.Mode)cbModes.SelectedItem;
+
 #if DEBUG
-            MessageBox.Show("Shutdown");
+            MessageBox.Show(mode.Name);
 #else
-            Process.Start("shutdown", "/s /t 0");
+            mode.Execute();
 #endif
         }
     }

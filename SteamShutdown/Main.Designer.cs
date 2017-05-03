@@ -36,6 +36,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.cbAll = new System.Windows.Forms.CheckBox();
             this.panelMain = new System.Windows.Forms.Panel();
+            this.lblAction = new System.Windows.Forms.Label();
+            this.cbModes = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.SuspendLayout();
@@ -105,9 +107,9 @@
             this.cbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAll.Location = new System.Drawing.Point(305, 335);
             this.cbAll.Name = "cbAll";
-            this.cbAll.Size = new System.Drawing.Size(176, 22);
+            this.cbAll.Size = new System.Drawing.Size(151, 22);
             this.cbAll.TabIndex = 7;
-            this.cbAll.Text = "Shutdown if all finished";
+            this.cbAll.Text = "Action if all finished";
             this.cbAll.UseVisualStyleBackColor = true;
             this.cbAll.CheckedChanged += new System.EventHandler(this.cbAll_CheckedChanged);
             // 
@@ -125,11 +127,33 @@
             this.panelMain.Size = new System.Drawing.Size(464, 318);
             this.panelMain.TabIndex = 8;
             // 
+            // lblAction
+            // 
+            this.lblAction.AutoSize = true;
+            this.lblAction.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.lblAction.Location = new System.Drawing.Point(18, 336);
+            this.lblAction.Name = "lblAction";
+            this.lblAction.Size = new System.Drawing.Size(49, 18);
+            this.lblAction.TabIndex = 9;
+            this.lblAction.Text = "Action";
+            // 
+            // cbModes
+            // 
+            this.cbModes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbModes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbModes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbModes.Location = new System.Drawing.Point(73, 332);
+            this.cbModes.Name = "cbModes";
+            this.cbModes.Size = new System.Drawing.Size(116, 28);
+            this.cbModes.TabIndex = 10;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(498, 369);
+            this.Controls.Add(this.cbModes);
+            this.Controls.Add(this.lblAction);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.cbAll);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -155,6 +179,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox cbAll;
         private System.Windows.Forms.Panel panelMain;
+        private System.Windows.Forms.Label lblAction;
+        private System.Windows.Forms.ComboBox cbModes;
     }
 }
 
