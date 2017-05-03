@@ -44,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
+    <Compile Include="Modes\Mode.cs" />
+    <Compile Include="Modes\SleepMode.cs" />
+    <Compile Include="Modes\ShutdownMode.cs" />
     <Compile Include="Steam_Events.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
