@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -13,6 +12,9 @@ namespace SteamShutdown
         public Main()
         {
             InitializeComponent();
+
+            cbModes.Items.AddRange(new Modes.Mode[] { new Modes.ShutdownMode(), new Modes.SleepMode() });
+            cbModes.SelectedIndex = 0;
 
             lbUnwatched.GotFocus += listBox_GotFocus;
             lbWatching.GotFocus += listBox_GotFocus;
@@ -55,6 +57,12 @@ namespace SteamShutdown
             to.Items.AddRange(items);
         }
 
+        private void SwitchAllToWatching()
+        {
+            lbWatching.Items.AddRange(lbUnwatched.Items);
+            lbUnwatched.Items.Clear();
+        }
+
 
 
         private void Steam_AppInfoDeleted(AppInfoEventArgs e)
@@ -87,9 +95,12 @@ namespace SteamShutdown
                     Shutdown();
             }
 
-            if (e.AppInfo.IsDownloading && !lbUnwatched.Items.Contains(e.AppInfo))
+            if (e.AppInfo.IsDownloading && !lbUnwatched.Items.Contains(e.AppInfo) && !lbWatching.Items.Contains(e.AppInfo))
             {
-                lbUnwatched.Items.Add(e.AppInfo);
+                if (cbAll.Checked)
+                    lbWatching.Items.Add(e.AppInfo);
+                else
+                    lbUnwatched.Items.Add(e.AppInfo);
             }
             else if (AppInfo.CheckDownloading(e.PreviousState) && !e.AppInfo.IsDownloading)
             {
@@ -105,12 +116,22 @@ namespace SteamShutdown
             SwitchItems(focused.SelectedItems.Cast<object>().ToArray(), focused, unfocused);
         }
 
+        private void cbAll_CheckedChanged(object sender, EventArgs e)
+        {
+            panelMain.Enabled = !cbAll.Checked;
+
+            if (cbAll.Checked)
+                SwitchAllToWatching();
+        }
+
         private void Shutdown()
         {
+            var mode = (Modes.Mode)cbModes.SelectedItem;
+
 #if DEBUG
-            MessageBox.Show("Shutdown");
+            MessageBox.Show(mode.Name);
 #else
-            Process.Start("shutdown", "/s /t 0");
+            mode.Execute();
 #endif
         }
     }

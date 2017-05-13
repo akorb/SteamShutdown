@@ -34,7 +34,12 @@
             this.lblUnwatched = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cbAll = new System.Windows.Forms.CheckBox();
+            this.panelMain = new System.Windows.Forms.Panel();
+            this.lblAction = new System.Windows.Forms.Label();
+            this.cbModes = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
+            this.panelMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // lbUnwatched
@@ -42,7 +47,7 @@
             this.lbUnwatched.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbUnwatched.FormattingEnabled = true;
             this.lbUnwatched.ItemHeight = 20;
-            this.lbUnwatched.Location = new System.Drawing.Point(13, 44);
+            this.lbUnwatched.Location = new System.Drawing.Point(4, 31);
             this.lbUnwatched.Name = "lbUnwatched";
             this.lbUnwatched.Size = new System.Drawing.Size(168, 284);
             this.lbUnwatched.TabIndex = 0;
@@ -52,7 +57,7 @@
             this.lbWatching.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbWatching.FormattingEnabled = true;
             this.lbWatching.ItemHeight = 20;
-            this.lbWatching.Location = new System.Drawing.Point(302, 44);
+            this.lbWatching.Location = new System.Drawing.Point(293, 31);
             this.lbWatching.Name = "lbWatching";
             this.lbWatching.Size = new System.Drawing.Size(168, 284);
             this.lbWatching.TabIndex = 1;
@@ -72,7 +77,7 @@
             // 
             this.lblUnwatched.AutoSize = true;
             this.lblUnwatched.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUnwatched.Location = new System.Drawing.Point(9, 19);
+            this.lblUnwatched.Location = new System.Drawing.Point(0, 6);
             this.lblUnwatched.Name = "lblUnwatched";
             this.lblUnwatched.Size = new System.Drawing.Size(94, 20);
             this.lblUnwatched.TabIndex = 4;
@@ -82,7 +87,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(298, 19);
+            this.label1.Location = new System.Drawing.Point(289, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 20);
             this.label1.TabIndex = 5;
@@ -91,27 +96,74 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.btnSwitch);
-            this.panel1.Location = new System.Drawing.Point(187, 44);
+            this.panel1.Location = new System.Drawing.Point(178, 31);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(109, 284);
             this.panel1.TabIndex = 6;
+            // 
+            // cbAll
+            // 
+            this.cbAll.AutoSize = true;
+            this.cbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbAll.Location = new System.Drawing.Point(305, 335);
+            this.cbAll.Name = "cbAll";
+            this.cbAll.Size = new System.Drawing.Size(151, 22);
+            this.cbAll.TabIndex = 7;
+            this.cbAll.Text = "Action if all finished";
+            this.cbAll.UseVisualStyleBackColor = true;
+            this.cbAll.CheckedChanged += new System.EventHandler(this.cbAll_CheckedChanged);
+            // 
+            // panelMain
+            // 
+            this.panelMain.AutoSize = true;
+            this.panelMain.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelMain.Controls.Add(this.lbUnwatched);
+            this.panelMain.Controls.Add(this.lbWatching);
+            this.panelMain.Controls.Add(this.panel1);
+            this.panelMain.Controls.Add(this.lblUnwatched);
+            this.panelMain.Controls.Add(this.label1);
+            this.panelMain.Location = new System.Drawing.Point(17, 11);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(464, 318);
+            this.panelMain.TabIndex = 8;
+            // 
+            // lblAction
+            // 
+            this.lblAction.AutoSize = true;
+            this.lblAction.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.lblAction.Location = new System.Drawing.Point(18, 336);
+            this.lblAction.Name = "lblAction";
+            this.lblAction.Size = new System.Drawing.Size(49, 18);
+            this.lblAction.TabIndex = 9;
+            this.lblAction.Text = "Action";
+            // 
+            // cbModes
+            // 
+            this.cbModes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbModes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbModes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbModes.Location = new System.Drawing.Point(73, 332);
+            this.cbModes.Name = "cbModes";
+            this.cbModes.Size = new System.Drawing.Size(116, 28);
+            this.cbModes.TabIndex = 10;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 346);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.lblUnwatched);
-            this.Controls.Add(this.lbWatching);
-            this.Controls.Add(this.lbUnwatched);
+            this.ClientSize = new System.Drawing.Size(498, 369);
+            this.Controls.Add(this.cbModes);
+            this.Controls.Add(this.lblAction);
+            this.Controls.Add(this.panelMain);
+            this.Controls.Add(this.cbAll);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Main";
             this.ShowIcon = false;
             this.Text = "Steam Shutdown";
             this.panel1.ResumeLayout(false);
+            this.panelMain.ResumeLayout(false);
+            this.panelMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -125,6 +177,10 @@
         private System.Windows.Forms.Label lblUnwatched;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox cbAll;
+        private System.Windows.Forms.Panel panelMain;
+        private System.Windows.Forms.Label lblAction;
+        private System.Windows.Forms.ComboBox cbModes;
     }
 }
 

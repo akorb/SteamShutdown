@@ -63,11 +63,11 @@ namespace SteamShutdown
 
                 foreach (FileInfo fileInfo in fileInfos)
                 {
-                    string json = AcfToJson(File.ReadAllLines(fileInfo.FullName).ToList());
+                    // Skip if file is empty
+                    if (fileInfo.Length == 0) continue;
 
-                    dynamic stuff = JsonConvert.DeserializeObject(json);
-
-                    AppInfo ai = JsonToAppInfo(stuff);
+                    AppInfo ai = FileToAppInfo(fileInfo.FullName);
+                    if (ai == null) continue;
 
                     appInfos.Add(ai);
                 }
@@ -76,11 +76,24 @@ namespace SteamShutdown
             Apps = appInfos;
         }
 
+        public static AppInfo FileToAppInfo(string filename)
+        {
+            string[] content = File.ReadAllLines(filename);
+
+            // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
+            if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0'))) return null;
+
+            string json = AcfToJson(content.ToList());
+            dynamic stuff = JsonConvert.DeserializeObject(json);
+            AppInfo ai = JsonToAppInfo(stuff);
+            return ai;
+        }
+
         private static AppInfo JsonToAppInfo(dynamic json)
         {
             AppInfo newInfo = new AppInfo
             {
-                ID = int.Parse((json.appid ?? json.appID).ToString()),
+                ID = int.Parse((json.appid ?? json.appID ?? json.AppID).ToString()),
                 Name = json.name ?? json.installdir,
                 State = int.Parse(json.StateFlags.ToString())
             };

@@ -1,0 +1,34 @@
+"AppState"
+{
+	"AppID"		"213670"
+	"Universe"		"1"
+	"name"		"South Park™: The Stick of Truth™"
+	"StateFlags"		"4"
+	"installdir"		"South Park - The Stick of Truth"
+	"LastUpdated"		"1454802487"
+	"UpdateResult"		"0"
+	"SizeOnDisk"		"5845718820"
+	"buildid"		"228353"
+	"LastOwner"		"76561198030640421"
+	"BytesToDownload"		"0"
+	"BytesDownloaded"		"0"
+	"AutoUpdateBehavior"		"0"
+	"AllowOtherDownloadsWhileRunning"		"0"
+	"UserConfig"
+	{
+		"language"		"german"
+	}
+	"MountedDepots"
+	{
+		"228983"		"8124929965194586177"
+		"228990"		"1829726630299308803"
+		"213671"		"1311951799795185235"
+		"213672"		"702764020587970247"
+		"213685"		"2552738055771406358"
+	}
+	"InstallScripts"
+	{
+		"0"		"_CommonRedist\\vcredist\\2010\\installscript.vdf"
+		"1"		"_CommonRedist\\DirectX\\Jun2010\\installscript.vdf"
+	}
+}

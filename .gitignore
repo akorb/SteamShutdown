@@ -1,4 +1,4 @@
-SteamShutdown/bin
-SteamShutdown/obj
+/SteamShutdown/bin
+/SteamShutdown/obj
 *.suo
-packages
+/packages
