@@ -10,4 +10,10 @@ So this is the first reliable program that shutdowns the PC as soon as all steam
 ## Usage
 It has a "two-columns-design".  
 The right column contains tracked downloads and vice-versa. If all tracked downloads finished, the pc will shutdown.  
+<<<<<<< HEAD
+Not satisfied with the design yet, each suggestion is welcomed.
+
+##mvega
+=======
 Not satisfied with the design yet, each suggestion is welcome.
+>>>>>>> SteamShutdown/master
