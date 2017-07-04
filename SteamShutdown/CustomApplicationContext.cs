@@ -58,18 +58,15 @@ namespace SteamShutdown
             notifyIcon.ContextMenuStrip.Items.Clear();
 
             var sortedApps = Steam.SortedApps;
-
             foreach (AppInfo game in sortedApps)
             {
                 AddToolStripItem(game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
             }
 
             notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-
             AddToolStripItem("Complete all downloads", AllItem_Click, StateMachine.WaitForAll);
 
             notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-
             AddToolStripItem("Close", CloseItem_Click);
         }
 
