@@ -14,6 +14,7 @@ namespace SteamShutdown
         static string[] LibraryPaths;
 
         public static List<AppInfo> Apps { get; private set; } = new List<AppInfo>();
+        public static List<AppInfo> SortedApps => Apps.OrderBy(x => x.Name).ToList();
 
         static Steam()
         {

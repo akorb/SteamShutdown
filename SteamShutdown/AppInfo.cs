@@ -1,6 +1,8 @@
-﻿namespace SteamShutdown
+﻿using System;
+
+namespace SteamShutdown
 {
-    public class AppInfo
+    public class AppInfo : IComparable<AppInfo>
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -30,6 +32,11 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        public int CompareTo(AppInfo info)
+        {
+            return Name.CompareTo(info.Name);
         }
     }
 }
