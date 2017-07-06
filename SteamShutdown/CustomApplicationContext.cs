@@ -57,7 +57,7 @@ namespace SteamShutdown
             e.Cancel = false;
             notifyIcon.ContextMenuStrip.Items.Clear();
 
-            var sortedApps = Steam.SortedApps;
+            var sortedApps = Steam.SortedApps.Where(x => x.IsDownloading);
             foreach (AppInfo game in sortedApps)
             {
                 AddToolStripItem(game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
