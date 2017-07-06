@@ -14,6 +14,19 @@ namespace SteamShutdown
         [STAThread]
         static void Main()
         {
+            if (!EnsureSingleInstance()) return;
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            var applicationContext = new CustomApplicationContext();
+            Application.Run(applicationContext);
+        }
+
+        private static bool EnsureSingleInstance()
+        {
             string appProcessName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
             Process[] RunningProcesses = Process.GetProcessesByName(appProcessName);
 
@@ -23,28 +36,20 @@ namespace SteamShutdown
 
             if (RunningProcesses.Length == 1)
             {
-                // Already running. This process is the client of IPC
+                // Only running process. This process is the server of IPC
                 ServiceHost serviceHost = new ServiceHost(typeof(IPCTestServer));
                 serviceHost.AddServiceEndpoint(typeof(ITestContract), binding, address);
                 serviceHost.Open();
+                return true;
             }
             else
             {
-                // Only running process. This process is the server of IPC
+                // Already running. This process is the client of IPC
                 EndpointAddress ep = new EndpointAddress(address);
                 ITestContract channel = ChannelFactory<ITestContract>.CreateChannel(binding, ep);
                 channel.ShowAnInstanceIsRunning();
-                return;
+                return false;
             }
-
-
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            var applicationContext = new CustomApplicationContext();
-            Application.Run(applicationContext);
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
