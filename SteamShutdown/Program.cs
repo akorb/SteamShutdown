@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -12,6 +13,10 @@ namespace SteamShutdown
         [STAThread]
         static void Main()
         {
+            string appProcessName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
+            Process[] RunningProcesses = Process.GetProcessesByName(appProcessName);
+            if (RunningProcesses.Length > 1) return;
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             Application.EnableVisualStyles();
