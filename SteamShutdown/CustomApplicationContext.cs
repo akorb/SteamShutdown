@@ -14,7 +14,7 @@ namespace SteamShutdown
     /// </remarks>
     public class CustomApplicationContext : ApplicationContext
     {
-        const string DefaultTooltip = "Execute action after chosen game downloads finished.";
+        const string TOOL_TIP = "Execute action after chosen game downloads finished.";
 
         /// <summary>
 		/// This class should be created and passed into Application.Run( ... )
@@ -152,7 +152,7 @@ namespace SteamShutdown
             {
                 ContextMenuStrip = new ContextMenuStrip(),
                 Icon = Properties.Resources.icon,
-                Text = DefaultTooltip,
+                Text = TOOL_TIP,
                 Visible = true
             };
             notifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
