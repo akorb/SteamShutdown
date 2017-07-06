@@ -11,6 +11,6 @@
             return Name;
         }
 
-        public static Mode[] GetAllModes => new Mode[] { new ShutdownMode(), new SleepMode() };
+        public static Mode[] GetAllModes => new Mode[] { new ShutdownMode(), new HibernationMode() };
     }
 }
