@@ -56,7 +56,7 @@ namespace SteamShutdown
         private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = false;
-            var root = notifyIcon.ContextMenuStrip.Items;
+            var root = NotifyIcon.ContextMenuStrip.Items;
             root.Clear();
 
             var sortedApps = Steam.SortedApps.Where(x => x.IsDownloading).ToList();
@@ -150,20 +150,20 @@ namespace SteamShutdown
         # region generic code framework
 
         System.ComponentModel.IContainer components;	// a list of components to dispose when the context is disposed
-        NotifyIcon notifyIcon;				            // the icon that sits in the system tray
+        public static NotifyIcon NotifyIcon { get; private set; }				            // the icon that sits in the system tray
 
         private void InitializeContext()
         {
             components = new System.ComponentModel.Container();
-            notifyIcon = new NotifyIcon(components)
+            NotifyIcon = new NotifyIcon(components)
             {
                 ContextMenuStrip = new ContextMenuStrip(),
                 Icon = Properties.Resources.icon,
                 Text = TOOL_TIP,
                 Visible = true
             };
-            notifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
-            notifyIcon.ShowBalloonTip(2000, "Hello", "You find me in the taskbar.", ToolTipIcon.Info);
+            NotifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
+            NotifyIcon.ShowBalloonTip(2000, "Hello", "You find me in the taskbar.", ToolTipIcon.Info);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace SteamShutdown
         /// </summary>
         protected override void ExitThreadCore()
         {
-            notifyIcon.Visible = false; // should remove lingering tray icon
+            NotifyIcon.Visible = false; // should remove lingering tray icon
             base.ExitThreadCore();
         }
 
