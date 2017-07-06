@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SteamShutdown.Modes
+﻿namespace SteamShutdown.Modes
 {
     public abstract class Mode
     {
@@ -15,5 +10,7 @@ namespace SteamShutdown.Modes
         {
             return Name;
         }
+
+        public static Mode[] GetAllModes => new Mode[] { new ShutdownMode(), new SleepMode() };
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SteamShutdown.Modes;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -55,24 +56,38 @@ namespace SteamShutdown
         private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = false;
-            notifyIcon.ContextMenuStrip.Items.Clear();
+            var root = notifyIcon.ContextMenuStrip.Items;
+            root.Clear();
 
             var sortedApps = Steam.SortedApps.Where(x => x.IsDownloading);
             foreach (AppInfo game in sortedApps)
             {
-                AddToolStripItem(game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
+                AddToolStripItem(root, game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
             }
 
-            notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            AddToolStripItem("Complete all downloads", AllItem_Click, StateMachine.WaitForAll);
+            root.Add(new ToolStripSeparator());
+            var modeNode = (ToolStripMenuItem)AddToolStripItem(root, "Modes");
 
-            notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            AddToolStripItem("Close", CloseItem_Click);
+            foreach (var mode in Mode.GetAllModes)
+            {
+                AddToolStripItem(modeNode.DropDownItems, mode.Name, Mode_Click, mode.GetType() == StateMachine.ActiveMode.GetType(), mode);
+            }
+
+            root.Add(new ToolStripSeparator());
+            AddToolStripItem(root, "Complete all downloads", AllItem_Click, StateMachine.WaitForAll);
+
+            root.Add(new ToolStripSeparator());
+            AddToolStripItem(root, "Close", CloseItem_Click);
         }
 
         private void CloseItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void Mode_Click(object sender, EventArgs e)
+        {
+            StateMachine.ActiveMode = (Mode)((ToolStripItem)sender).Tag;
         }
 
         private void AllItem_Click(object sender, EventArgs e)
@@ -101,15 +116,28 @@ namespace SteamShutdown
             }
         }
 
-        private void AddToolStripItem(string name, Action<object, EventArgs> clickAction, bool isChecked = false, object tag = null, bool enabled = true)
+        private ToolStripItem AddToolStripItem(ToolStripItemCollection root, string name, Action<object, EventArgs> clickAction = null, bool isChecked = false, object tag = null, bool enabled = true)
         {
-            var item = notifyIcon.ContextMenuStrip.Items.Add(name);
+            var item = root.Add(name);
             item.Tag = tag;
             item.Enabled = enabled;
-            item.Click += (o, e) => clickAction(o, e);
+
+            if (clickAction != null)
+                item.Click += (o, e) => clickAction(o, e);
 
             if (isChecked)
                 ((ToolStripMenuItem)item).Checked = true;
+
+            return item;
+        }
+
+        private void Shutdown()
+        {
+#if DEBUG
+            MessageBox.Show(StateMachine.ActiveMode.Name);
+#else
+            StateMachine.ActiveMode.Execute();
+#endif
         }
 
         # region generic code framework
@@ -149,17 +177,5 @@ namespace SteamShutdown
         }
 
         # endregion generic code framework
-
-        private void Shutdown()
-        {
-            // TODO allow choosing mode
-            var mode = new Modes.ShutdownMode(); //(Modes.Mode)cbModes.SelectedItem;
-
-#if DEBUG
-            MessageBox.Show(mode.Name);
-#else
-            mode.Execute();
-#endif
-        }
     }
 }
