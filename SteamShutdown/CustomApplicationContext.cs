@@ -1,6 +1,7 @@
 ﻿using SteamShutdown.Modes;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace SteamShutdown
@@ -162,15 +163,27 @@ namespace SteamShutdown
                 Text = TOOL_TIP,
                 Visible = true
             };
+            NotifyIcon.MouseUp += NotifyIcon_MouseUp;
             NotifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
             NotifyIcon.ShowBalloonTip(2000, "Hello", "You find me in the taskbar.", ToolTipIcon.Info);
         }
 
+        private void NotifyIcon_MouseUp(object sender, MouseEventArgs e)
+        {
+            // Show ContextMenuStrip with left click too
+            if (e.Button == MouseButtons.Left)
+            {
+                MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
+                mi.Invoke(NotifyIcon, null);
+            }
+        }
+
+
         /// <summary>
-		/// When the application context is disposed, dispose things like the notify icon.
-		/// </summary>
-		/// <param name="disposing"></param>
-		protected override void Dispose(bool disposing)
+        /// When the application context is disposed, dispose things like the notify icon.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected override void Dispose(bool disposing)
         {
             if (disposing && components != null) { components.Dispose(); }
         }
