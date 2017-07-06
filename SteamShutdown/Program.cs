@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.ServiceModel;
 using System.Windows.Forms;
 
 namespace SteamShutdown
@@ -15,7 +16,27 @@ namespace SteamShutdown
         {
             string appProcessName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
             Process[] RunningProcesses = Process.GetProcessesByName(appProcessName);
-            if (RunningProcesses.Length > 1) return;
+
+            // IPC: https://gorillacoding.wordpress.com/2013/02/03/using-wcf-for-inter-process-communication/
+            const string address = "net.pipe://localhost/SteamShutdown/ShowBalloonTip";
+            NetNamedPipeBinding binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None);
+
+            if (RunningProcesses.Length == 1)
+            {
+                // Already running. This process is the client of IPC
+                ServiceHost serviceHost = new ServiceHost(typeof(IPCTestServer));
+                serviceHost.AddServiceEndpoint(typeof(ITestContract), binding, address);
+                serviceHost.Open();
+            }
+            else
+            {
+                // Only running process. This process is the server of IPC
+                EndpointAddress ep = new EndpointAddress(address);
+                ITestContract channel = ChannelFactory<ITestContract>.CreateChannel(binding, ep);
+                channel.ShowAnInstanceIsRunning();
+                return;
+            }
+
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 

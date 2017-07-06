@@ -43,11 +43,13 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
     <Compile Include="CustomApplicationContext.cs" />
+    <Compile Include="IPC.cs" />
     <Compile Include="Modes\Mode.cs" />
     <Compile Include="Modes\SleepMode.cs" />
     <Compile Include="Modes\ShutdownMode.cs" />
