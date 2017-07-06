@@ -2,9 +2,9 @@
 
 namespace SteamShutdown.Modes
 {
-    public class SleepMode : Mode
+    public class HibernationMode : Mode
     {
-        public override string Name { get; protected set; } = "Sleep";
+        public override string Name { get; protected set; } = "Hibernate";
 
         public override void Execute()
         {
