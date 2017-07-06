@@ -103,9 +103,9 @@ namespace SteamShutdown
             var allItem = (ToolStripMenuItem)sender;
             StateMachine.WaitForAll = !allItem.Checked;
 
+            StateMachine.WatchedGames.Clear();
             if (StateMachine.WaitForAll)
             {
-                StateMachine.WatchedGames.Clear();
                 StateMachine.WatchedGames.AddRange(Steam.Apps.Where(x => x.IsDownloading));
             }
         }
