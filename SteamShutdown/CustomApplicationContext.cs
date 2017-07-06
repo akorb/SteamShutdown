@@ -59,10 +59,17 @@ namespace SteamShutdown
             var root = notifyIcon.ContextMenuStrip.Items;
             root.Clear();
 
-            var sortedApps = Steam.SortedApps.Where(x => x.IsDownloading);
-            foreach (AppInfo game in sortedApps)
+            var sortedApps = Steam.SortedApps.Where(x => x.IsDownloading).ToList();
+            if (sortedApps.Count > 0)
             {
-                AddToolStripItem(root, game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
+                foreach (AppInfo game in sortedApps)
+                {
+                    AddToolStripItem(root, game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
+                }
+            }
+            else
+            {
+                AddToolStripItem(root, "No games downloading", enabled: false);
             }
 
             root.Add(new ToolStripSeparator());
@@ -156,6 +163,7 @@ namespace SteamShutdown
                 Visible = true
             };
             notifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
+            notifyIcon.ShowBalloonTip(2000, "Hello", "You find me in the taskbar.", ToolTipIcon.Info);
         }
 
         /// <summary>
