@@ -5,14 +5,14 @@ using System.Windows.Forms;
 namespace SteamShutdown
 {
     [ServiceContract()]
-    interface ITestContract
+    interface IBubbleContract
     {
         [OperationContract]
         void ShowAnInstanceIsRunning();
     }
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class IPCTestServer : ITestContract
+    public class IPCBubbleServer : IBubbleContract
     {
         public void ShowAnInstanceIsRunning()
         {

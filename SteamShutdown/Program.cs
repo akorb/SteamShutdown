@@ -37,8 +37,8 @@ namespace SteamShutdown
             if (RunningProcesses.Length == 1)
             {
                 // Only running process. This process is the server of IPC
-                ServiceHost serviceHost = new ServiceHost(typeof(IPCTestServer));
-                serviceHost.AddServiceEndpoint(typeof(ITestContract), binding, address);
+                ServiceHost serviceHost = new ServiceHost(typeof(IPCBubbleServer));
+                serviceHost.AddServiceEndpoint(typeof(IBubbleContract), binding, address);
                 serviceHost.Open();
                 return true;
             }
@@ -46,7 +46,7 @@ namespace SteamShutdown
             {
                 // Already running. This process is the client of IPC
                 EndpointAddress ep = new EndpointAddress(address);
-                ITestContract channel = ChannelFactory<ITestContract>.CreateChannel(binding, ep);
+                IBubbleContract channel = ChannelFactory<IBubbleContract>.CreateChannel(binding, ep);
                 channel.ShowAnInstanceIsRunning();
                 return false;
             }
