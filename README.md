@@ -9,3 +9,6 @@ So this is the first reliable program that shutdowns the PC as soon as all steam
 
 ## Usage
 SteamShutdown has no real GUI. It's only an icon in the taskbar. Click it to see the menu.
+
+## Official Website
+https://steamshutdown.andreas-korb.de/
