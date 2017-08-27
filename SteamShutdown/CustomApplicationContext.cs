@@ -144,7 +144,14 @@ namespace SteamShutdown
 #if DEBUG
             MessageBox.Show(StateMachine.ActiveMode.Name);
 #else
-            StateMachine.ActiveMode.Execute();
+            var timer = new System.Timers.Timer(30000.0);
+            timer.AutoReset = false;
+
+            NotifyIcon.ShowBalloonTip(5000, "", $"The action \"{StateMachine.ActiveMode.Name}\" will be executed in 30 seconds.{Environment.NewLine}Quit to abort.", ToolTipIcon.Info);
+
+            var modeToExecute = StateMachine.ActiveMode;
+            timer.Elapsed += (o, e) => modeToExecute.Execute();
+            timer.Start();
 #endif
         }
 
