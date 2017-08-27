@@ -8,7 +8,7 @@ I don't use any hack like tracking the hard drive or the network usage.
 So this is the first reliable program that shutdowns the PC as soon as all steam downloads have finished.
 
 ## Usage
-SteamShutdown has no real GUI. It's only an icon in the taskbar. Click it to see the menu.
+SteamShutdown has no window. It's only an icon in the taskbar. Click it to see the menu.
 
 ## Official Website
 https://steamshutdown.andreas-korb.de/
