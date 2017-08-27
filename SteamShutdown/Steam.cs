@@ -60,9 +60,8 @@ namespace SteamShutdown
             foreach (string path in LibraryPaths)
             {
                 DirectoryInfo di = new DirectoryInfo(path);
-                FileInfo[] fileInfos = di.GetFiles("*.acf");
 
-                foreach (FileInfo fileInfo in fileInfos)
+                foreach (FileInfo fileInfo in di.EnumerateFiles("*.acf"))
                 {
                     // Skip if file is empty
                     if (fileInfo.Length == 0) continue;
