@@ -50,6 +50,7 @@
     <Compile Include="AppInfo.cs" />
     <Compile Include="CustomApplicationContext.cs" />
     <Compile Include="IPC.cs" />
+    <Compile Include="Modes\SleepMode.cs" />
     <Compile Include="Modes\Mode.cs" />
     <Compile Include="Modes\HibernateMode.cs" />
     <Compile Include="Modes\ShutdownMode.cs" />
