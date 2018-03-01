@@ -85,6 +85,16 @@ namespace SteamShutdown
 
             string json = AcfToJson(content.ToList());
             dynamic stuff = JsonConvert.DeserializeObject(json);
+
+            if (stuff == null)
+            {
+                MessageBox.Show(
+                    $"{filename}{Environment.NewLine}contains unexpected content.{Environment.NewLine}This game will be ignored.",
+                    "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return null;
+            }
+
             AppInfo ai = JsonToAppInfo(stuff);
             return ai;
         }
