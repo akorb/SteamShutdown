@@ -2,3 +2,4 @@
 /SteamShutdown/obj
 *.suo
 /packages
+/.vs
