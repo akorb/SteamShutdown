@@ -1,6 +1,7 @@
 # Debug and Release folder
 bin/
 obj/
+/packages
 
 # User-specific files
 *.suo
