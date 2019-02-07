@@ -24,8 +24,8 @@ namespace SteamShutdown
         public static bool CheckDownloading(int appState)
         {
             // 6: In queue for update
-            // 1024: download running
             // 1026: In queue
+            // 1042: download running
             return appState == 6 || appState == 1026 || appState == 1042 || appState == 1062 || appState == 1030;
         }
 

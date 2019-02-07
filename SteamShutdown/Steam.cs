@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -87,7 +88,7 @@ namespace SteamShutdown
             // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
             if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0'))) return null;
 
-            string json = AcfToJson(content.ToList());
+            string json = AcfToJson(content);
             dynamic stuff = JsonConvert.DeserializeObject(json);
 
             if (stuff == null)
@@ -115,27 +116,46 @@ namespace SteamShutdown
             return newInfo;
         }
 
-        private static string AcfToJson(List<string> acfLines)
+        private static string AcfToJson(string[] acfLines)
         {
-            acfLines.RemoveAt(0);
+            StringBuilder sb = new StringBuilder(acfLines.Length - 1);
 
-            for (int i = 1; i < acfLines.Count; i++)
+            for (int i = 1; i < acfLines.Length; i++)
             {
                 Match mSingle = singleLine.Match(acfLines[i]);
                 if (mSingle.Success)
                 {
-                    string newLine = mSingle.Groups[1].Value + ": " + mSingle.Groups[2].Value + ",";
-                    acfLines[i] = newLine;
+                    sb.Append(mSingle.Groups[1].Value);
+                    sb.Append(": ");
+                    sb.Append(mSingle.Groups[2].Value);
+
+                    // Last value of object must not have a tailing comma
+                    if (i + 1 < acfLines.Length && acfLines[i + 1].EndsWith("}"))
+                        sb.AppendLine();
+                    else
+                        sb.AppendLine(",");
+                }
+                else if (acfLines[i].StartsWith("\t") && acfLines[i].EndsWith("}"))
+                {
+                    sb.Append(acfLines[i]);
+
+                    if (i + 1 < acfLines.Length && acfLines[i + 1].EndsWith("}"))
+                        sb.AppendLine();
+                    else
+                        sb.AppendLine(",");
                 }
                 else if (startOfObject.IsMatch(acfLines[i]))
                 {
-                    acfLines[i] += ":";
+                    sb.Append(acfLines[i]);
+                    sb.AppendLine(":");
                 }
-                else if (acfLines[i].StartsWith("\t") && acfLines[i].EndsWith("}"))
-                    acfLines[i] += ",";
+                else
+                {
+                    sb.AppendLine(acfLines[i]);
+                }
             }
 
-            return string.Join("", acfLines);
+            return sb.ToString();
         }
 
         private static string[] GetLibraryPaths()
@@ -147,7 +167,7 @@ namespace SteamShutdown
 
             string libraryFoldersPath = Path.Combine(InstallationPath, "SteamApps", "libraryfolders.vdf");
 
-            string json = AcfToJson(File.ReadAllLines(libraryFoldersPath).ToList());
+            string json = AcfToJson(File.ReadAllLines(libraryFoldersPath));
 
 
             dynamic stuff = JsonConvert.DeserializeObject(json);

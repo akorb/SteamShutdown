@@ -50,7 +50,7 @@ namespace SteamShutdown
                 {
                     try
                     {
-                        json = AcfToJson(File.ReadAllLines(e.FullPath).ToList());
+                        json = AcfToJson(File.ReadAllLines(e.FullPath));
                         break;
                     }
                     catch (IOException)
