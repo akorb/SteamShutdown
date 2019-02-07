@@ -18,8 +18,8 @@ namespace SteamShutdown
         static Regex singleLine = new Regex("^(\\t+\".+\")\\t\\t(\".*\")$", RegexOptions.Compiled);
         static Regex startOfObject = new Regex("^\\t+\".+\"$", RegexOptions.Compiled);
 
-        public static List<AppInfo> Apps { get; private set; } = new List<AppInfo>();
-        public static List<AppInfo> SortedApps => Apps.OrderBy(x => x.Name).ToList();
+        public static List<App> Apps { get; private set; } = new List<App>();
+        public static List<App> SortedApps => Apps.OrderBy(x => x.Name).ToList();
 
         static Steam()
         {
@@ -60,7 +60,7 @@ namespace SteamShutdown
 
         private static void UpdateAppInfos()
         {
-            var appInfos = new List<AppInfo>();
+            var appInfos = new List<App>();
 
             foreach (string path in LibraryPaths)
             {
@@ -71,7 +71,7 @@ namespace SteamShutdown
                     // Skip if file is empty
                     if (fileInfo.Length == 0) continue;
 
-                    AppInfo ai = FileToAppInfo(fileInfo.FullName);
+                    App ai = FileToAppInfo(fileInfo.FullName);
                     if (ai == null) continue;
 
                     appInfos.Add(ai);
@@ -81,7 +81,7 @@ namespace SteamShutdown
             Apps = appInfos;
         }
 
-        public static AppInfo FileToAppInfo(string filename)
+        public static App FileToAppInfo(string filename)
         {
             string[] content = File.ReadAllLines(filename);
 
@@ -100,13 +100,13 @@ namespace SteamShutdown
                 return null;
             }
 
-            AppInfo ai = JsonToAppInfo(stuff);
+            App ai = JsonToAppInfo(stuff);
             return ai;
         }
 
-        private static AppInfo JsonToAppInfo(dynamic json)
+        private static App JsonToAppInfo(dynamic json)
         {
-            AppInfo newInfo = new AppInfo
+            App newInfo = new App
             {
                 ID = int.Parse((json.appid ?? json.appID ?? json.AppID).ToString()),
                 Name = json.name ?? json.installdir,

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.ServiceModel;
 using System.Windows.Forms;
 
 namespace SteamShutdown
@@ -25,31 +24,29 @@ namespace SteamShutdown
             Application.Run(applicationContext);
         }
 
+        // IPC: https://gorillacoding.wordpress.com/2013/02/03/using-wcf-for-inter-process-communication/
         private static bool EnsureSingleInstance()
         {
-            string appProcessName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
-            Process[] RunningProcesses = Process.GetProcessesByName(appProcessName);
+            bool isAlreadyRunning = IsAlreadyRunning();
 
-            // IPC: https://gorillacoding.wordpress.com/2013/02/03/using-wcf-for-inter-process-communication/
-            const string address = "net.pipe://localhost/SteamShutdown/ShowBalloonTip";
-            NetNamedPipeBinding binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None);
-
-            if (RunningProcesses.Length == 1)
+            if (IsAlreadyRunning())
             {
-                // Only running process. This process is the server of IPC
-                ServiceHost serviceHost = new ServiceHost(typeof(IPCBubbleServer));
-                serviceHost.AddServiceEndpoint(typeof(IBubbleContract), binding, address);
-                serviceHost.Open();
-                return true;
+                RPC.ShowAnInstanceIsRunning();
             }
             else
             {
-                // Already running. This process is the client of IPC
-                EndpointAddress ep = new EndpointAddress(address);
-                IBubbleContract channel = ChannelFactory<IBubbleContract>.CreateChannel(binding, ep);
-                channel.ShowAnInstanceIsRunning();
-                return false;
+                RPC.StartServer();
             }
+
+            return !isAlreadyRunning;
+        }
+
+        private static bool IsAlreadyRunning()
+        {
+            // string appProcessName = Path.GetFileNameWithoutExtension(System.Windows.Forms.Application.ExecutablePath);
+            string appProcessName = Process.GetCurrentProcess().ProcessName;
+            Process[] RunningProcesses = Process.GetProcessesByName(appProcessName);
+            return RunningProcesses.Length == 2;
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

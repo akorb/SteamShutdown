@@ -48,7 +48,7 @@ namespace SteamShutdown
                 if (StateMachine.WaitForAll)
                     StateMachine.WatchedGames.Add(e.AppInfo);
             }
-            else if (AppInfo.CheckDownloading(e.PreviousState) && !e.AppInfo.IsDownloading)
+            else if (App.CheckDownloading(e.PreviousState) && !e.AppInfo.IsDownloading)
             {
                 StateMachine.WatchedGames.Remove(e.AppInfo);
             }
@@ -63,7 +63,7 @@ namespace SteamShutdown
             var sortedApps = Steam.SortedApps.Where(x => x.IsDownloading).ToList();
             if (sortedApps.Count > 0)
             {
-                foreach (AppInfo game in sortedApps)
+                foreach (App game in sortedApps)
                 {
                     AddToolStripItem(root, game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
                 }
@@ -116,11 +116,11 @@ namespace SteamShutdown
 
             if (!item.Checked)
             {
-                StateMachine.WatchedGames.Add((AppInfo)item.Tag);
+                StateMachine.WatchedGames.Add((App)item.Tag);
             }
             else
             {
-                StateMachine.WatchedGames.Remove((AppInfo)item.Tag);
+                StateMachine.WatchedGames.Remove((App)item.Tag);
             }
         }
 

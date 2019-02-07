@@ -31,7 +31,7 @@ namespace SteamShutdown
         {
             int id = IdFromAcfFilename(e.FullPath);
 
-            AppInfo info = Apps.FirstOrDefault(x => x.ID == id);
+            App info = Apps.FirstOrDefault(x => x.ID == id);
             if (info == null) return;
 
             var eventArgs = new AppInfoEventArgs(info);
@@ -72,7 +72,7 @@ namespace SteamShutdown
             int newID = JsonToAppInfo(newJson).ID;
 
             // Search for changed app, if null it's a new app
-            AppInfo info = Apps.FirstOrDefault(x => x.ID == newID);
+            App info = Apps.FirstOrDefault(x => x.ID == newID);
             AppInfoChangedEventArgs eventArgs;
 
             if (info != null) // Download state changed
@@ -99,7 +99,7 @@ namespace SteamShutdown
     {
         public int PreviousState { get; private set; }
 
-        public AppInfoChangedEventArgs(AppInfo appInfo, int oldState) : base(appInfo)
+        public AppInfoChangedEventArgs(App appInfo, int oldState) : base(appInfo)
         {
             PreviousState = oldState;
         }
@@ -107,9 +107,9 @@ namespace SteamShutdown
 
     public class AppInfoEventArgs : EventArgs
     {
-        public AppInfo AppInfo { get; private set; }
+        public App AppInfo { get; private set; }
 
-        public AppInfoEventArgs(AppInfo info)
+        public AppInfoEventArgs(App info)
         {
             AppInfo = info;
         }

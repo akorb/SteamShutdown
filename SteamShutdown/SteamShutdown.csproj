@@ -59,7 +59,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppInfo.cs" />
+    <Compile Include="App.cs" />
     <Compile Include="CustomApplicationContext.cs" />
     <Compile Include="IPC.cs" />
     <Compile Include="Modes\SleepMode.cs" />

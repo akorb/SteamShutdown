@@ -9,7 +9,7 @@ namespace SteamShutdown.Tests
         [TestMethod]
         public void AppInfoTests()
         {
-            AppInfo ai = Steam.FileToAppInfo(AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..\..\TestFiles\appmanifest_213670.acf");
+            App ai = Steam.FileToAppInfo(AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..\..\TestFiles\appmanifest_213670.acf");
             Assert.AreEqual(ai.ID, 213670);
             Assert.AreEqual(ai.Name, "South Park™: The Stick of Truth™");
 

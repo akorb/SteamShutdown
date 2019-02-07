@@ -5,7 +5,7 @@ namespace SteamShutdown
 {
     public static class StateMachine
     {
-        public static List<AppInfo> WatchedGames { get; set; } = new List<AppInfo>();
+        public static List<App> WatchedGames { get; set; } = new List<App>();
 
         public static bool WaitForAll { get; set; }
 
