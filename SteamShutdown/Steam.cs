@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SteamShutdown
@@ -12,6 +13,9 @@ namespace SteamShutdown
     {
         static string InstallationPath;
         static string[] LibraryPaths;
+
+        static Regex singleLine = new Regex("^(\\t+\".+\")\\t\\t(\".*\")$", RegexOptions.Compiled);
+        static Regex startOfObject = new Regex("^\\t+\".+\"$", RegexOptions.Compiled);
 
         public static List<AppInfo> Apps { get; private set; } = new List<AppInfo>();
         public static List<AppInfo> SortedApps => Apps.OrderBy(x => x.Name).ToList();
@@ -38,7 +42,7 @@ namespace SteamShutdown
             {
                 var fsw = new FileSystemWatcher(libraryFolder, "*.acf");
                 fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
-                fsw.Changed += fsw_Changed;
+                fsw.Changed += Fsw_Changed;
                 fsw.Deleted += Fsw_Deleted;
                 fsw.EnableRaisingEvents = true;
             }
@@ -115,20 +119,20 @@ namespace SteamShutdown
         {
             acfLines.RemoveAt(0);
 
-            for (int i = 0; i < acfLines.Count; i++)
+            for (int i = 1; i < acfLines.Count; i++)
             {
-                if (acfLines[i].StartsWith("\t") && acfLines[i].EndsWith("}"))
+                Match mSingle = singleLine.Match(acfLines[i]);
+                if (mSingle.Success)
+                {
+                    string newLine = mSingle.Groups[1].Value + ": " + mSingle.Groups[2].Value + ",";
+                    acfLines[i] = newLine;
+                }
+                else if (startOfObject.IsMatch(acfLines[i]))
+                {
+                    acfLines[i] += ":";
+                }
+                else if (acfLines[i].StartsWith("\t") && acfLines[i].EndsWith("}"))
                     acfLines[i] += ",";
-
-                acfLines[i] = acfLines[i].TrimStart('\t');
-
-                acfLines[i] = acfLines[i].Replace("\t\t", ":");
-                if (acfLines[i].Last() == '\"' && !acfLines[i + 1].Contains('{') && !acfLines[i + 1].Contains('}'))
-                    acfLines[i] += ",";
-
-                if (i + 1 < acfLines.Count)
-                    if (acfLines[i + 1].Contains('{'))
-                        acfLines[i] += ":";
             }
 
             return string.Join("", acfLines);
