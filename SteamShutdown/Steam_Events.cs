@@ -7,22 +7,22 @@ namespace SteamShutdown
 {
     public static partial class Steam
     {
-        public delegate void AppInfoChangedEventHandler(AppInfoChangedEventArgs e);
+        public delegate void AppInfoChangedEventHandler(object sender, AppInfoChangedEventArgs e);
         public static event AppInfoChangedEventHandler AppInfoChanged;
 
-        public delegate void AppInfoDeletedEventHandler(AppInfoEventArgs e);
+        public delegate void AppInfoDeletedEventHandler(object sender, AppInfoEventArgs e);
         public static event AppInfoDeletedEventHandler AppInfoDeleted;
 
 
 
-        static void OnAppInfoChanged(AppInfoChangedEventArgs e)
+        static void OnAppInfoChanged(object sender, AppInfoChangedEventArgs e)
         {
-            AppInfoChanged?.Invoke(e);
+            AppInfoChanged?.Invoke(sender, e);
         }
 
-        static void OnAppInfoDeleted(AppInfoEventArgs e)
+        static void OnAppInfoDeleted(object sender, AppInfoEventArgs e)
         {
-            AppInfoDeleted?.Invoke(e);
+            AppInfoDeleted?.Invoke(sender, e);
         }
 
 
@@ -35,10 +35,10 @@ namespace SteamShutdown
             if (info == null) return;
 
             var eventArgs = new AppInfoEventArgs(info);
-            OnAppInfoDeleted(eventArgs);
+            OnAppInfoDeleted(info, eventArgs);
         }
 
-        private static void fsw_Changed(object sender, FileSystemEventArgs e)
+        private static void Fsw_Changed(object sender, FileSystemEventArgs e)
         {
             string json = null;
             try
@@ -89,7 +89,7 @@ namespace SteamShutdown
                 eventArgs = new AppInfoChangedEventArgs(info, -1);
             }
 
-            OnAppInfoChanged(eventArgs);
+            OnAppInfoChanged(info, eventArgs);
         }
     }
 

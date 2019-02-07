@@ -28,12 +28,12 @@ namespace SteamShutdown
             Steam.AppInfoDeleted += Steam_AppInfoDeleted;
         }
 
-        private void Steam_AppInfoDeleted(AppInfoEventArgs e)
+        private void Steam_AppInfoDeleted(object sender, AppInfoEventArgs e)
         {
             StateMachine.WatchedGames.Remove(e.AppInfo);
         }
 
-        private void Steam_AppInfoChanged(AppInfoChangedEventArgs e)
+        private void Steam_AppInfoChanged(object sender, AppInfoChangedEventArgs e)
         {
             if (StateMachine.WatchedGames.Count > 0)
             {
