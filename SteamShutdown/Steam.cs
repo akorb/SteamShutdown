@@ -30,6 +30,18 @@ namespace SteamShutdown
                 return;
             }
 
+            if (!Directory.Exists(InstallationPath))
+            {
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                fbd.Description = "Your steam folder could not be automatically detected."
+                    + Environment.NewLine
+                    + "Please select the root of your steam folder."
+                    + Environment.NewLine
+                    + "Example: " + @"C:\Program Files (x86)\Steam";
+                if (fbd.ShowDialog() != DialogResult.OK) return;
+                InstallationPath = fbd.SelectedPath;
+            }
+
             LibraryPaths = GetLibraryPaths();
             if (LibraryPaths.Length == 0)
             {
