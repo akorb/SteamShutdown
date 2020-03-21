@@ -1,12 +1,20 @@
-﻿using System;
+﻿using SteamShutdown.Modes;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
 namespace SteamShutdown
 {
-    static class Program
+    static class SteamShutdown
     {
+        public static List<App> WatchedGames { get; set; } = new List<App>();
+
+        public static bool WaitForAll { get; set; }
+
+        public static Mode ActiveMode { get; set; } = new ShutdownMode();
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -29,7 +37,7 @@ namespace SteamShutdown
         {
             bool isAlreadyRunning = IsAlreadyRunning();
 
-            if (IsAlreadyRunning())
+            if (isAlreadyRunning)
             {
                 RPC.ShowAnInstanceIsRunning();
             }

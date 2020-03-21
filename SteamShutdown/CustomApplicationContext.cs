@@ -30,27 +30,27 @@ namespace SteamShutdown
 
         private void Steam_AppInfoDeleted(object sender, AppInfoEventArgs e)
         {
-            StateMachine.WatchedGames.Remove(e.AppInfo);
+            SteamShutdown.WatchedGames.Remove(e.AppInfo);
         }
 
         private void Steam_AppInfoChanged(object sender, AppInfoChangedEventArgs e)
         {
-            if (StateMachine.WatchedGames.Count > 0)
+            if (SteamShutdown.WatchedGames.Count > 0)
             {
-                bool doShutdown = StateMachine.WatchedGames.All(x => !x.IsDownloading);
+                bool doShutdown = SteamShutdown.WatchedGames.All(x => !x.IsDownloading);
 
                 if (doShutdown)
                     Shutdown();
             }
 
-            if (e.AppInfo.IsDownloading && !StateMachine.WatchedGames.Contains(e.AppInfo))
+            if (e.AppInfo.IsDownloading && !SteamShutdown.WatchedGames.Contains(e.AppInfo))
             {
-                if (StateMachine.WaitForAll)
-                    StateMachine.WatchedGames.Add(e.AppInfo);
+                if (SteamShutdown.WaitForAll)
+                    SteamShutdown.WatchedGames.Add(e.AppInfo);
             }
             else if (App.CheckDownloading(e.PreviousState) && !e.AppInfo.IsDownloading)
             {
-                StateMachine.WatchedGames.Remove(e.AppInfo);
+                SteamShutdown.WatchedGames.Remove(e.AppInfo);
             }
         }
 
@@ -60,12 +60,12 @@ namespace SteamShutdown
             var root = NotifyIcon.ContextMenuStrip.Items;
             root.Clear();
 
-            var sortedApps = Steam.SortedApps.Where(x => x.IsDownloading).ToList();
-            if (sortedApps.Count > 0)
+            var downloadingApps = Steam.Apps.Where(x => x.IsDownloading).ToList();
+            if (downloadingApps.Count > 0)
             {
-                foreach (App game in sortedApps)
+                foreach (App game in downloadingApps)
                 {
-                    AddToolStripItem(root, game.Name, Item_Click, !StateMachine.WaitForAll && StateMachine.WatchedGames.Contains(game), game, !StateMachine.WaitForAll);
+                    AddToolStripItem(root, game.Name, Item_Click, !SteamShutdown.WaitForAll && SteamShutdown.WatchedGames.Contains(game), game, !SteamShutdown.WaitForAll);
                 }
             }
             else
@@ -78,11 +78,11 @@ namespace SteamShutdown
 
             foreach (var mode in Mode.GetAllModes)
             {
-                AddToolStripItem(modeNode.DropDownItems, mode.Name, Mode_Click, mode.GetType() == StateMachine.ActiveMode.GetType(), mode);
+                AddToolStripItem(modeNode.DropDownItems, mode.Name, Mode_Click, mode.GetType() == SteamShutdown.ActiveMode.GetType(), mode);
             }
 
             root.Add(new ToolStripSeparator());
-            AddToolStripItem(root, "Complete all downloads", AllItem_Click, StateMachine.WaitForAll);
+            AddToolStripItem(root, "Complete all downloads", AllItem_Click, SteamShutdown.WaitForAll);
 
             root.Add(new ToolStripSeparator());
             AddToolStripItem(root, "Close", CloseItem_Click);
@@ -95,18 +95,18 @@ namespace SteamShutdown
 
         private void Mode_Click(object sender, EventArgs e)
         {
-            StateMachine.ActiveMode = (Mode)((ToolStripItem)sender).Tag;
+            SteamShutdown.ActiveMode = (Mode)((ToolStripItem)sender).Tag;
         }
 
         private void AllItem_Click(object sender, EventArgs e)
         {
             var allItem = (ToolStripMenuItem)sender;
-            StateMachine.WaitForAll = !allItem.Checked;
+            SteamShutdown.WaitForAll = !allItem.Checked;
 
-            StateMachine.WatchedGames.Clear();
-            if (StateMachine.WaitForAll)
+            SteamShutdown.WatchedGames.Clear();
+            if (SteamShutdown.WaitForAll)
             {
-                StateMachine.WatchedGames.AddRange(Steam.Apps.Where(x => x.IsDownloading));
+                SteamShutdown.WatchedGames.AddRange(Steam.Apps.Where(x => x.IsDownloading));
             }
         }
 
@@ -116,11 +116,11 @@ namespace SteamShutdown
 
             if (!item.Checked)
             {
-                StateMachine.WatchedGames.Add((App)item.Tag);
+                SteamShutdown.WatchedGames.Add((App)item.Tag);
             }
             else
             {
-                StateMachine.WatchedGames.Remove((App)item.Tag);
+                SteamShutdown.WatchedGames.Remove((App)item.Tag);
             }
         }
 
@@ -142,20 +142,18 @@ namespace SteamShutdown
         private void Shutdown()
         {
 #if DEBUG
-            MessageBox.Show(StateMachine.ActiveMode.Name);
+            MessageBox.Show(SteamShutdown.ActiveMode.Name);
 #else
             var timer = new System.Timers.Timer(30000.0);
             timer.AutoReset = false;
 
-            NotifyIcon.ShowBalloonTip(5000, "", $"The action \"{StateMachine.ActiveMode.Name}\" will be executed in 30 seconds.{Environment.NewLine}Quit to abort.", ToolTipIcon.Info);
+            NotifyIcon.ShowBalloonTip(5000, "", $"The action \"{SteamShutdown.ActiveMode.Name}\" will be executed in 30 seconds.{Environment.NewLine}Quit to abort.", ToolTipIcon.Info);
 
-            var modeToExecute = StateMachine.ActiveMode;
+            var modeToExecute = SteamShutdown.ActiveMode;
             timer.Elapsed += (o, e) => modeToExecute.Execute();
             timer.Start();
 #endif
         }
-
-        # region generic code framework
 
         System.ComponentModel.IContainer components;	// a list of components to dispose when the context is disposed
         public static NotifyIcon NotifyIcon { get; private set; }				            // the icon that sits in the system tray
@@ -189,7 +187,6 @@ namespace SteamShutdown
         /// <summary>
         /// When the application context is disposed, dispose things like the notify icon.
         /// </summary>
-        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && components != null) { components.Dispose(); }
@@ -203,7 +200,5 @@ namespace SteamShutdown
             NotifyIcon.Visible = false; // should remove lingering tray icon
             base.ExitThreadCore();
         }
-
-        # endregion generic code framework
     }
 }

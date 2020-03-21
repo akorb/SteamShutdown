@@ -2,7 +2,7 @@
 
 namespace SteamShutdown
 {
-    public class App : IComparable<App>
+    public class App
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -32,11 +32,6 @@ namespace SteamShutdown
         public override string ToString()
         {
             return Name;
-        }
-
-        public int CompareTo(App info)
-        {
-            return Name.CompareTo(info.Name);
         }
     }
 }

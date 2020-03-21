@@ -12,46 +12,67 @@ namespace SteamShutdown
 {
     public static partial class Steam
     {
-        static string InstallationPath;
-        static string[] LibraryPaths;
-
-        static Regex singleLine = new Regex("^(\\t+\".+\")\\t\\t(\".*\")$", RegexOptions.Compiled);
-        static Regex startOfObject = new Regex("^\\t+\".+\"$", RegexOptions.Compiled);
+        static readonly Regex singleLine = new Regex("^(\\t+\".+\")\\t\\t(\".*\")$", RegexOptions.Compiled);
+        static readonly Regex startOfObject = new Regex("^\\t+\".+\"$", RegexOptions.Compiled);
 
         public static List<App> Apps { get; private set; } = new List<App>();
-        public static List<App> SortedApps => Apps.OrderBy(x => x.Name).ToList();
+
+        const string STEAM_REG_VALUE = "InstallPath";
 
         static Steam()
         {
-            InstallationPath = Registry.GetValue(GetSteamRegistryPath(), "InstallPath", "") as string;
-            if (InstallationPath == null)
+            string steamRegistryPath = GetSteamRegistryPath();
+            var rg = Registry.LocalMachine.OpenSubKey(steamRegistryPath, true);
+            string installationPath = rg.GetValue(STEAM_REG_VALUE, null) as string;
+            if (installationPath == null)
             {
                 MessageBox.Show("Steam is not installed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                Environment.Exit(0);
             }
 
-            if (!Directory.Exists(InstallationPath))
+            if (!Directory.Exists(installationPath))
             {
+                var key = Path.Combine(steamRegistryPath, STEAM_REG_VALUE);
+
+                DialogResult mb = MessageBox.Show("Seems a registry value is wrong, probably because of moving Steam to another location." + Environment.NewLine
+                    + $"I can try to fix that for you. For that I will delete this registry value: {key}" + Environment.NewLine
+                    + "You have to restart Steam afterwards since this will set the correct value for this registry value." + Environment.NewLine
+                    + Environment.NewLine
+                    + "If you click \"Yes\", the registry value will be deleted and SteamShutdown closed. Then first restart Steam before opening SteamShutdown again." + Environment.NewLine
+                    + "If you click \"No\", you can select the installation path by yourself.",
+                    "Error",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (mb == DialogResult.Yes)
+                {
+                    rg.DeleteValue("InstallPath");
+                    Environment.Exit(0);
+                }
+
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
                 fbd.Description = "Your steam folder could not be automatically detected."
                     + Environment.NewLine
                     + "Please select the root of your steam folder."
                     + Environment.NewLine
                     + "Example: " + @"C:\Program Files (x86)\Steam";
-                if (fbd.ShowDialog() != DialogResult.OK) return;
-                InstallationPath = fbd.SelectedPath;
+                DialogResult re = fbd.ShowDialog();
+                if (re != DialogResult.OK) return;
+                installationPath = fbd.SelectedPath;
             }
 
-            LibraryPaths = GetLibraryPaths();
-            if (LibraryPaths.Length == 0)
+            rg.Close();
+
+            string[] libraryPaths = GetLibraryPaths(installationPath);
+            if (libraryPaths.Length == 0)
             {
-                MessageBox.Show("No game library found.\r\nThis might appear if Steam has been installed on this machine but was uninstalled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("No game library found." + Environment.NewLine + "This might appear if Steam has been installed on this machine but was uninstalled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
             }
 
-            UpdateAppInfos();
+            UpdateAppInfos(libraryPaths);
 
-            foreach (string libraryFolder in LibraryPaths)
+            foreach (string libraryFolder in libraryPaths)
             {
                 var fsw = new FileSystemWatcher(libraryFolder, "*.acf");
                 fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
@@ -70,11 +91,11 @@ namespace SteamShutdown
             return int.Parse(filenameWithoutExtension.Substring(loc + 1));
         }
 
-        private static void UpdateAppInfos()
+        private static void UpdateAppInfos(IEnumerable<string> libraryPaths)
         {
             var appInfos = new List<App>();
 
-            foreach (string path in LibraryPaths)
+            foreach (string path in libraryPaths)
             {
                 DirectoryInfo di = new DirectoryInfo(path);
 
@@ -90,7 +111,8 @@ namespace SteamShutdown
                 }
             }
 
-            Apps = appInfos;
+
+            Apps = appInfos.OrderBy(x => x.Name).ToList();
         }
 
         public static App FileToAppInfo(string filename)
@@ -170,14 +192,14 @@ namespace SteamShutdown
             return sb.ToString();
         }
 
-        private static string[] GetLibraryPaths()
+        private static string[] GetLibraryPaths(string installationPath)
         {
             List<string> paths = new List<string>()
                 {
-                    Path.Combine(InstallationPath, "SteamApps")
+                    Path.Combine(installationPath, "SteamApps")
                 };
 
-            string libraryFoldersPath = Path.Combine(InstallationPath, "SteamApps", "libraryfolders.vdf");
+            string libraryFoldersPath = Path.Combine(installationPath, "SteamApps", "libraryfolders.vdf");
 
             string json = AcfToJson(File.ReadAllLines(libraryFoldersPath));
 
@@ -197,13 +219,12 @@ namespace SteamShutdown
 
         private static string GetSteamRegistryPath()
         {
-            const string start = @"HKEY_LOCAL_MACHINE\SOFTWARE\";
+            string start = @"SOFTWARE\";
             if (Environment.Is64BitOperatingSystem)
             {
-                return start + @"Wow6432Node\Valve\Steam";
+                start += @"Wow6432Node\";
             }
 
-            // 32 bit
             return start + @"Valve\Steam";
         }
     }
