@@ -99,6 +99,9 @@ namespace SteamShutdown
             {
                 DirectoryInfo di = new DirectoryInfo(path);
 
+                // Seems there is still a directory specified in the Steam settings which does not exist anymore
+                if (!di.Exists) continue;
+
                 foreach (FileInfo fileInfo in di.EnumerateFiles("*.acf"))
                 {
                     // Skip if file is empty
