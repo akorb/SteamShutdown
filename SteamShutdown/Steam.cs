@@ -99,9 +99,6 @@ namespace SteamShutdown
             {
                 DirectoryInfo di = new DirectoryInfo(path);
 
-                // Seems there is still a directory specified in the Steam settings which does not exist anymore
-                if (!di.Exists) continue;
-
                 foreach (FileInfo fileInfo in di.EnumerateFiles("*.acf"))
                 {
                     // Skip if file is empty
@@ -206,7 +203,6 @@ namespace SteamShutdown
 
             string json = AcfToJson(File.ReadAllLines(libraryFoldersPath));
 
-
             dynamic stuff = JsonConvert.DeserializeObject(json);
 
             for (int i = 1; ; i++)
@@ -214,7 +210,9 @@ namespace SteamShutdown
                 dynamic path = stuff[i.ToString()];
 
                 if (path == null) break;
-                paths.Add(Path.Combine(path.ToString(), "SteamApps"));
+                string path_string = Path.Combine(path.ToString(), "SteamApps");
+                if (Directory.Exists(path_string))
+                    paths.Add(path_string);
             }
 
             return paths.ToArray();
