@@ -1,8 +1,8 @@
 ﻿using System.Windows.Forms;
 
-namespace SteamShutdown.Modes
+namespace SteamShutdown.Actions
 {
-    public class HibernationMode : Mode
+    public class Hibernation : Action
     {
         public override string Name { get; protected set; } = "Hibernate";
 

@@ -1,6 +1,6 @@
-﻿namespace SteamShutdown.Modes
+﻿namespace SteamShutdown.Actions
 {
-    public abstract class Mode
+    public abstract class Action
     {
         public abstract string Name { get; protected set; }
 
@@ -11,6 +11,6 @@
             return Name;
         }
 
-        public static Mode[] GetAllModes => new Mode[] { new ShutdownMode(), new HibernationMode(), new SleepMode() };
+        public static Action[] GetAllActions => new Action[] { new Shutdown(), new Hibernation(), new Sleep() };
     }
 }

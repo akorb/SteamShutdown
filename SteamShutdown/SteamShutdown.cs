@@ -1,4 +1,4 @@
-﻿using SteamShutdown.Modes;
+﻿using SteamShutdown.Actions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +13,7 @@ namespace SteamShutdown
 
         public static bool WaitForAll { get; set; }
 
-        public static Mode ActiveMode { get; set; } = new ShutdownMode();
+        public static Actions.Action ActiveMode { get; set; } = new Shutdown();
 
         /// <summary>
         /// The main entry point for the application.

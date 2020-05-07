@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
-namespace SteamShutdown.Modes
+namespace SteamShutdown.Actions
 {
-    public class ShutdownMode : Mode
+    public class Shutdown : Action
     {
         public override string Name { get; protected set; } = "Shutdown";
 

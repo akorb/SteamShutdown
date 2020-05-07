@@ -1,4 +1,4 @@
-﻿using SteamShutdown.Modes;
+﻿using SteamShutdown.Actions;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -74,11 +74,11 @@ namespace SteamShutdown
             }
 
             root.Add(new ToolStripSeparator());
-            var modeNode = (ToolStripMenuItem)AddToolStripItem(root, "Modes");
+            var modeNode = (ToolStripMenuItem)AddToolStripItem(root, "Actions");
 
-            foreach (var mode in Mode.GetAllModes)
+            foreach (var mode in Actions.Action.GetAllActions)
             {
-                AddToolStripItem(modeNode.DropDownItems, mode.Name, Mode_Click, mode.GetType() == SteamShutdown.ActiveMode.GetType(), mode);
+                AddToolStripItem(modeNode.DropDownItems, mode.Name, this.Mode_Click, mode.GetType() == SteamShutdown.ActiveMode.GetType(), mode);
             }
 
             root.Add(new ToolStripSeparator());
@@ -95,7 +95,7 @@ namespace SteamShutdown
 
         private void Mode_Click(object sender, EventArgs e)
         {
-            SteamShutdown.ActiveMode = (Mode)((ToolStripItem)sender).Tag;
+            SteamShutdown.ActiveMode = (Actions.Action)((ToolStripItem)sender).Tag;
         }
 
         private void AllItem_Click(object sender, EventArgs e)

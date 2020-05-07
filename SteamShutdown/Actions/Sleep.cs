@@ -1,8 +1,8 @@
 ﻿using System.Windows.Forms;
 
-namespace SteamShutdown.Modes
+namespace SteamShutdown.Actions
 {
-    public class SleepMode : Mode
+    public class Sleep : Action
     {
         public override string Name { get; protected set; } = "Sleep";
 
