@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SteamShutdown
+﻿namespace SteamShutdown
 {
     public class App
     {
@@ -9,29 +7,28 @@ namespace SteamShutdown
         public int State { get; set; }
 
         /// <summary>
-        /// Returns a value indicating whether the game is being downloaded. Includes games in queue for download.
+        /// Returns a value indicating whether the game is being downloaded.
         /// </summary>
-        public bool IsDownloading
-        {
-            get { return CheckDownloading(State); }
-        }
+        public bool IsDownloading => CheckDownloading(State);
 
         /// <summary>
-        /// Returns a value indicating whether the game is being downloaded. Includes games in queue for download.
+        /// Returns a value indicating whether the game is being downloaded.
         /// </summary>
-        /// <param name="appState"></param>
-        /// <returns></returns>
         public static bool CheckDownloading(int appState)
         {
-            // 6: In queue for update
-            // 1026: In queue
-            // 1042: download running
-            return appState == 6 || appState == 1026 || appState == 1042 || appState == 1062 || appState == 1030;
+            // The second bit defines if anything for the app needs to be downloaded
+            // Doesn't matter if queued, download running and so on
+            return IsBitSet(appState, 1);
         }
 
         public override string ToString()
         {
             return Name;
+        }
+
+        private static bool IsBitSet(int b, int pos)
+        {
+            return (b & (1 << pos)) != 0;
         }
     }
 }
