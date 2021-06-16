@@ -201,18 +201,51 @@ namespace SteamShutdown
 
             string libraryFoldersPath = Path.Combine(installationPath, "SteamApps", "libraryfolders.vdf");
 
-            string json = AcfToJson(File.ReadAllLines(libraryFoldersPath));
+            //Issue #34 and related: Crash on Startup because the "path" isn't parsed but instead the whole block is considered. This is due to the fact that it appears Valve has changed the layout of this file or it has something to do with multiple library folders defined.
+            //                       Either way it is more secure to search through the file and extract any "path" occurrences rather than trying to deserialize the whole file.
 
-            dynamic stuff = JsonConvert.DeserializeObject(json);
-
-            for (int i = 1; ; i++)
+            //First we will read the whole library config file into memory
+            var vdfRaw = File.ReadAllLines(libraryFoldersPath);
+            //Cycle through each line of text
+            //This method is rather slow but speed shouldn't be a concern since this file is parsed once the app starts and even on slow disks this should perform quick enough.
+            foreach (var s in vdfRaw)
             {
-                dynamic path = stuff[i.ToString()];
+                //Check if a line contains the "path" token
+                if (!s.ToLower().Contains("path"))
+                {
+                    continue;
+                }
+                //We should have a line like this:
+                //          "path"		"E:\\SteamLibrary"
+                //Get rid of any trailing white-spaces and any quote marks
+                var sanitizedLine = s.Trim().Replace(@"""", string.Empty);
+                //It looks like this now:
+                //path	\t\t	E:\\SteamLibrary
+                //Check again if the layout of the string matches expectations - in this case the resulting string should start with "path" and nothing else.
+                if (sanitizedLine.ToLower().StartsWith("path"))
+                {
+                    //We know that each key-value pair is separated by \t
+                    //Splitting it by \t while omitting empty results will leave us with an array of two values. 
+                    var pathKeyValuePair = sanitizedLine.Split(new[]{
+                        '\t'
+                    }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (path == null) break;
-                string path_string = Path.Combine(path.ToString(), "SteamApps");
-                if (Directory.Exists(path_string))
-                    paths.Add(path_string);
+                    //Check if we got less than 2 entries.
+                    if (pathKeyValuePair.Length < 2)
+                    {
+                        continue;
+                    }
+
+                    //Append SteamApps folder
+                    var steamAppsPath = Path.Combine(pathKeyValuePair[1], "SteamApps");
+                    //Check if it exists, bail if not.
+                    if (!Directory.Exists(steamAppsPath))
+                    {
+                        continue;
+                    }
+                    //Path exists, ready to add to collection.
+                    paths.Add(steamAppsPath);
+                }
             }
 
             return paths.ToArray();
