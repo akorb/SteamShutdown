@@ -213,6 +213,13 @@ namespace SteamShutdown
 
                 if (pathNode.ContainsKey("path"))
                 {
+                    // New format
+
+                    // If a library folder is removed in the Steam settings, the path persists, but its 'mounted' value is set to 0 (disabled)
+                    // We consider only the value '1' as that the path is actually enabled.
+                    if (pathNode["mounted"].ToString() != "1")
+                        continue;
+
                     // Valve introduced a new format for the "libraryfolders.vdf" file
                     // In the new format, the node "1" not only contains a single value (the path),
                     // but multiple values: path, label, mounted, contentid
