@@ -203,16 +203,26 @@ namespace SteamShutdown
 
             string json = AcfToJson(File.ReadAllLines(libraryFoldersPath));
 
-            dynamic stuff = JsonConvert.DeserializeObject(json);
+            dynamic rootNode = JsonConvert.DeserializeObject(json);
 
             for (int i = 1; ; i++)
             {
-                dynamic path = stuff[i.ToString()];
+                dynamic pathNode = rootNode[i.ToString()];
 
-                if (path == null) break;
-                string path_string = Path.Combine(path.ToString(), "SteamApps");
-                if (Directory.Exists(path_string))
-                    paths.Add(path_string);
+                if (pathNode == null) break;
+
+                if (pathNode.ContainsKey("path"))
+                {
+                    // Valve introduced a new format for the "libraryfolders.vdf" file
+                    // In the new format, the node "1" not only contains a single value (the path),
+                    // but multiple values: path, label, mounted, contentid
+                    pathNode = pathNode["path"];
+                }
+
+                string path = Path.Combine(pathNode.ToString(), "SteamApps");
+
+                if (Directory.Exists(path))
+                    paths.Add(path);
             }
 
             return paths.ToArray();
