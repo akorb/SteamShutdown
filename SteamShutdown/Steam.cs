@@ -76,7 +76,7 @@ namespace SteamShutdown
             foreach (string libraryFolder in libraryPaths)
             {
                 var fsw = new FileSystemWatcher(libraryFolder, "*.acf");
-                fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+                fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.CreationTime;
                 fsw.Changed += Fsw_Changed;
                 fsw.Deleted += Fsw_Deleted;
                 fsw.EnableRaisingEvents = true;
