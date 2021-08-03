@@ -220,8 +220,9 @@ namespace SteamShutdown
                     // but multiple values: path, label, mounted, contentid
 
                     // If a library folder is removed in the Steam settings, the path persists, but its 'mounted' value is set to 0 (disabled)
-                    // We consider only the value '1' as that the path is actually enabled.
-                    if (pathNode["mounted"].ToString() != "1")
+                    // We consider only the value '1' as that the path is actually enabled.  If this key is not there, it's semantic is that it is mounted.
+                    dynamic mountedNode = pathNode["mounted"];
+                    if (mountedNode != null && mountedNode.ToString() != "1")
                         continue;
                     
                     pathNode = pathNode["path"];
