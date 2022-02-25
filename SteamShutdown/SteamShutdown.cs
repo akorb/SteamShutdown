@@ -121,8 +121,11 @@ namespace SteamShutdown
 
         public static void Log(string text)
         {
-            string output = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "debugging.txt");
-            File.AppendAllText(output, DateTime.Now.ToString(CultureInfo.InvariantCulture) + ": " + text + Environment.NewLine);
+#if DEBUG
+            //string outputFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "debugging.txt");
+            //File.AppendAllText(outputFile, DateTime.Now.ToString(CultureInfo.InvariantCulture) + ": " + text + Environment.NewLine);
+            Debug.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture) + ": " + text + Environment.NewLine);
+#endif
         }
     }
 }
