@@ -160,6 +160,8 @@ namespace SteamShutdown
 
         public static App FileToAppInfo(string filename)
         {
+            SteamShutdown.Log($"FileToAppInfo: {filename}");
+
             string[] content = File.ReadAllLines(filename);
 
             // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
