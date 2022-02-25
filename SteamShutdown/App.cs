@@ -16,11 +16,12 @@
         /// </summary>
         public static bool CheckDownloading(int appState)
         {
-            return (IsBitSet(appState, 1) || IsBitSet(appState, 10)) && !IsBitSet(appState, 9);
+            return (IsBitSet(appState, 1) || IsBitSet(appState, 10)) && !IsBitSet(appState, 9) && !IsBitSet(appState, 6);
 
             /* Counting from zero and starting from the right
              * Bit 1 indicates if a download is running
              * Bit 2 indicates if a game is installed
+             * Bit 6: Unknown, but https://github.com/akorb/SteamShutdown/issues/47 indicates that this bit shows the download is not running anymore
              * Bit 9 indicates if the download has been stopped by the user. The download will not happen, so don't wait for it.
              * Bit 10 (or maybe Bit 5) indicates if a DLC is downloaded for a game
              * 
@@ -33,6 +34,9 @@
              * 10000010100 Bit 1 not set, but Bit 5 and Bit 10. Happens if downloading a DLC for an already downloaded game.
              *             Because for a very short time after starting the download for this DLC the stateFlags becomes 20 = 00000010100
              *             I think Bit 5 indicates if "something" is happening with a DLC and Bit 10 indicates if it is downloading.
+             * 
+             * All known stateFlags while a download is NOT running so far:
+             * 00001000110 = 70
              */
         }
 
