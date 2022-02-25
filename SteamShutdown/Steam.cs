@@ -100,6 +100,12 @@ namespace SteamShutdown
         private static void Fsw_Renamed(object sender, RenamedEventArgs e)
         {
             SteamShutdown.Log("Fsw_Renamed: " + e.OldFullPath + " to " + e.FullPath + " ChangeType: " + e.ChangeType);
+
+            /*
+             * Steam does not change the files anymore, but creates a .acf.tmp file and overwrites the old .acf file by
+             * renaming the .acf.tmp file to .acf
+             */
+            UpdateAppInfo(e.FullPath);
         }
 
         private static void Fsw_Created(object sender, FileSystemEventArgs e)

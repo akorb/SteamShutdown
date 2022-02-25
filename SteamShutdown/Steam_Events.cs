@@ -29,7 +29,14 @@ namespace SteamShutdown
 
         private static void Fsw_Deleted(object sender, FileSystemEventArgs e)
         {
-            SteamShutdown.Log("Fsw_Deleted: " + e.FullPath + " Changetype: " + e.ChangeType);
+            SteamShutdown.Log("Fsw_Deleted: " + e.FullPath + " ChangeType: " + e.ChangeType);
+
+            /*
+             * Unfortunately, even for changing files, Steam creates a tmp file, deletes the old file and then renames the tmp file to its actual name.
+             * Therefore, we cannot distinguish anymore if a file was actually deleted or just "changed".
+             * Luckily, this functionality is hardly needed so I just disable it.
+             * 
+           
             int id = IdFromAcfFilename(e.FullPath);
 
             App info = Apps.FirstOrDefault(x => x.ID == id);
@@ -40,25 +47,30 @@ namespace SteamShutdown
             }
 
             var eventArgs = new AppInfoEventArgs(info);
-            OnAppInfoDeleted(info, eventArgs);
+            OnAppInfoDeleted(info, eventArgs);*/
         }
 
-        private static void Fsw_Changed(object sender, FileSystemEventArgs e)
+        private static void UpdateAppInfo(string filename)
         {
-            SteamShutdown.Log("Fsw_Changed: " + e.FullPath + " Changetype: " + e.ChangeType);
+            SteamShutdown.Log("UpdateAppInfo: " + filename);
             string json = null;
             try
             {
-                // This is necessary because sometimes the file is still accessed by steam, so let's wait for 10 ms and try again.
+                // This is necessary because sometimes the file is still accessed by steam, so let's wait for 50 ms and try again.
                 // Maximum 5 times
                 int counter = 1;
                 do
                 {
                     try
                     {
-                        SteamShutdown.Log($"Attempt #{counter} to read: {e.FullPath}");
-                        json = AcfToJson(File.ReadAllLines(e.FullPath));
+                        SteamShutdown.Log($"Attempt #{counter} to read: {filename}");
+                        json = AcfToJson(File.ReadAllLines(filename));
                         break;
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        // It's possible that this file got deleted in the meanwhile.
+                        return;
                     }
                     catch (IOException)
                     {
@@ -104,6 +116,13 @@ namespace SteamShutdown
             }
 
             OnAppInfoChanged(info, eventArgs);
+        }
+
+        private static void Fsw_Changed(object sender, FileSystemEventArgs e)
+        {
+            SteamShutdown.Log("UpdateAppInfo: " + e.FullPath + " Changetype: " + e.ChangeType);
+
+            UpdateAppInfo(e.FullPath);
         }
     }
 
