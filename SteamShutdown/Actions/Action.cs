@@ -4,7 +4,10 @@
     {
         public abstract string Name { get; protected set; }
 
-        public abstract void Execute();
+        public virtual void Execute()
+        {
+            SteamShutdown.Log("Execute action: " + Name);
+        }
 
         public override string ToString()
         {

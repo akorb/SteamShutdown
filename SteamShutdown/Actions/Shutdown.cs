@@ -8,6 +8,7 @@ namespace SteamShutdown.Actions
 
         public override void Execute()
         {
+            base.Execute();
             Process.Start("shutdown", "/s /t 0");
         }
     }

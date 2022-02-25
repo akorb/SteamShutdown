@@ -29,10 +29,15 @@ namespace SteamShutdown
 
         private static void Fsw_Deleted(object sender, FileSystemEventArgs e)
         {
+            SteamShutdown.Log("Fsw_Deleted: " + e.FullPath + " Changetype: " + e.ChangeType);
             int id = IdFromAcfFilename(e.FullPath);
 
             App info = Apps.FirstOrDefault(x => x.ID == id);
-            if (info == null) return;
+            if (info == null)
+            {
+                SteamShutdown.Log("Fsw_Deleted: info == null");
+                return;
+            }
 
             var eventArgs = new AppInfoEventArgs(info);
             OnAppInfoDeleted(info, eventArgs);
@@ -40,6 +45,7 @@ namespace SteamShutdown
 
         private static void Fsw_Changed(object sender, FileSystemEventArgs e)
         {
+            SteamShutdown.Log("Fsw_Changed: " + e.FullPath + " Changetype: " + e.ChangeType);
             string json = null;
             try
             {
@@ -50,6 +56,7 @@ namespace SteamShutdown
                 {
                     try
                     {
+                        SteamShutdown.Log($"Attempt #{counter} to read: {e.FullPath}");
                         json = AcfToJson(File.ReadAllLines(e.FullPath));
                         break;
                     }
@@ -60,13 +67,18 @@ namespace SteamShutdown
                 }
                 while (counter++ <= 5);
             }
-            catch
+            catch (Exception ex)
             {
+                SteamShutdown.Log($"Fsw_Changed: {ex}");
                 return;
             }
 
             // Shouldn't happen, but might occur if Steam holds the acf file too long
-            if (json == null) return;
+            if (json == null)
+            {
+                SteamShutdown.Log($"Fsw_Changed: json == null");
+                return;
+            }
 
             dynamic newJson = JsonConvert.DeserializeObject(json);
             int newID = JsonToAppInfo(newJson).ID;
@@ -80,6 +92,7 @@ namespace SteamShutdown
                 eventArgs = new AppInfoChangedEventArgs(info, info.State);
                 // Only update existing AppInfo
                 info.State = int.Parse(newJson.StateFlags.ToString());
+                SteamShutdown.Log("Download state changed: " + info.Name + " " + info.State + " IsDownloading: " + info.IsDownloading);
             }
             else // New download started
             {
@@ -87,6 +100,7 @@ namespace SteamShutdown
                 info = JsonToAppInfo(newJson);
                 Apps.Add(info);
                 eventArgs = new AppInfoChangedEventArgs(info, -1);
+                SteamShutdown.Log("New download started: " + info.Name + " " + info.State + " IsDownloading: " + info.IsDownloading);
             }
 
             OnAppInfoChanged(info, eventArgs);

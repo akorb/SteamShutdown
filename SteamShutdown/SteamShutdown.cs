@@ -3,6 +3,7 @@ using SteamShutdown.Actions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace SteamShutdown
         [STAThread]
         static void Main()
         {
+            Log("Launched");
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             if (!EnsureSingleInstance()) return;
             if (IsUpdateAvailable())
@@ -115,6 +117,12 @@ namespace SteamShutdown
                 // No further handling necessary since checking for an update is just a bonus.
             }
             return false;
+        }
+
+        public static void Log(string text)
+        {
+            string output = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "debugging.txt");
+            File.AppendAllText(output, DateTime.Now.ToString(CultureInfo.InvariantCulture) + ": " + text + Environment.NewLine);
         }
     }
 }

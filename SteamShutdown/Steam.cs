@@ -18,6 +18,8 @@ namespace SteamShutdown
 
         public static List<App> Apps { get; private set; } = new List<App>();
 
+        static List<FileSystemWatcher> fswList;
+
         const string STEAM_REG_VALUE = "InstallPath";
 
         static Steam()
@@ -31,15 +33,18 @@ namespace SteamShutdown
                 Environment.Exit(0);
             }
 
+            SteamShutdown.Log("Installation path: " + installationPath);
+
             if (!Directory.Exists(installationPath))
             {
                 var key = Path.Combine(steamRegistryPath, STEAM_REG_VALUE);
 
+                // TODO: change to YesNoCancel
                 DialogResult mb = MessageBox.Show("Seems a registry value is wrong, probably because of moving Steam to another location." + Environment.NewLine
                     + $"I can try to fix that for you. For that I will delete this registry value: {key}" + Environment.NewLine
                     + "You have to restart Steam afterwards since this will set the correct value for this registry value." + Environment.NewLine
                     + Environment.NewLine
-                    + "If you click \"Yes\", the registry value will be deleted and SteamShutdown closed. Then first restart Steam before opening SteamShutdown again." + Environment.NewLine
+                    + "If you click \"Yes\", the registry value will be deleted and SteamShutdown closed. Then restart Steam first before opening SteamShutdown again." + Environment.NewLine
                     + "If you click \"No\", you can select the installation path by yourself.",
                     "Error",
                     MessageBoxButtons.YesNo,
@@ -65,6 +70,7 @@ namespace SteamShutdown
             rg.Close();
 
             string[] libraryPaths = GetLibraryPaths(installationPath);
+            SteamShutdown.Log("Detected library paths: " + string.Join(", ", libraryPaths));
             if (libraryPaths.Length == 0)
             {
                 MessageBox.Show("No game library found." + Environment.NewLine + "This might appear if Steam has been installed on this machine but was uninstalled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -73,16 +79,43 @@ namespace SteamShutdown
 
             UpdateAppInfos(libraryPaths);
 
+            fswList = new List<FileSystemWatcher>(libraryPaths.Length);
             foreach (string libraryFolder in libraryPaths)
             {
-                var fsw = new FileSystemWatcher(libraryFolder, "*.acf");
-                fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.CreationTime;
+                FileSystemWatcher fsw = new FileSystemWatcher(libraryFolder, "*.acf");
+                fsw.Disposed += Fsw_Disposed;
+                fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.Attributes | NotifyFilters.LastAccess | NotifyFilters.Size;
                 fsw.Changed += Fsw_Changed;
+                fsw.Created += Fsw_Created;
                 fsw.Deleted += Fsw_Deleted;
+                fsw.Renamed += Fsw_Renamed;
+                fsw.Error += Fsw_Error;
                 fsw.EnableRaisingEvents = true;
+                fswList.Add(fsw);
+
+                SteamShutdown.Log("Created FileSystemWatcher for " + libraryFolder);
             }
         }
 
+        private static void Fsw_Renamed(object sender, RenamedEventArgs e)
+        {
+            SteamShutdown.Log("Fsw_Renamed: " + e.OldFullPath + " to " + e.FullPath + " ChangeType: " + e.ChangeType);
+        }
+
+        private static void Fsw_Created(object sender, FileSystemEventArgs e)
+        {
+            SteamShutdown.Log("Fsw_Created: " + e.FullPath + " ChangeType: " + e.ChangeType);
+        }
+
+        private static void Fsw_Disposed(object sender, EventArgs e)
+        {
+            SteamShutdown.Log("A FileSystemWatcher was disposed.");
+        }
+
+        private static void Fsw_Error(object sender, ErrorEventArgs e)
+        {
+            SteamShutdown.Log($"Fsw_Error: {e.GetException()}");
+        }
 
         public static int IdFromAcfFilename(string filename)
         {
@@ -94,6 +127,7 @@ namespace SteamShutdown
 
         private static void UpdateAppInfos(IEnumerable<string> libraryPaths)
         {
+            SteamShutdown.Log($"UpdateAppInfos for: {string.Join(", ", libraryPaths)}");
             var appInfos = new List<App>();
 
             foreach (string path in libraryPaths)
@@ -103,10 +137,18 @@ namespace SteamShutdown
                 foreach (FileInfo fileInfo in di.EnumerateFiles("*.acf"))
                 {
                     // Skip if file is empty
-                    if (fileInfo.Length == 0) continue;
+                    if (fileInfo.Length == 0)
+                    {
+                        SteamShutdown.Log($"UpdateAppInfos: File {fileInfo.FullName} was empty.");
+                        continue;
+                    }
 
                     App ai = FileToAppInfo(fileInfo.FullName);
-                    if (ai == null) continue;
+                    if (ai == null)
+                    {
+                        SteamShutdown.Log($"UpdateAppInfos: File {fileInfo.FullName} couldn't be parsed properly.");
+                        continue;
+                    }
 
                     appInfos.Add(ai);
                 }
@@ -121,7 +163,11 @@ namespace SteamShutdown
             string[] content = File.ReadAllLines(filename);
 
             // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
-            if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0'))) return null;
+            if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0')))
+            {
+                SteamShutdown.Log($"FileToAppInfo: {filename} only contained 0 bytes.");
+                return null;
+            }
 
             string json = AcfToJson(content);
             dynamic stuff = JsonConvert.DeserializeObject(json);

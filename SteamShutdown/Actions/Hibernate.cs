@@ -8,6 +8,7 @@ namespace SteamShutdown.Actions
 
         public override void Execute()
         {
+            base.Execute();
             Application.SetSuspendState(PowerState.Hibernate, false, false);
         }
     }

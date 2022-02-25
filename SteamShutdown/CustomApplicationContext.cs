@@ -152,6 +152,7 @@ namespace SteamShutdown
             var modeToExecute = SteamShutdown.ActiveMode;
             timer.Elapsed += (o, e) => modeToExecute.Execute();
             timer.Start();
+            SteamShutdown.Log("Started timer for action.");
 #endif
         }
 
