@@ -171,7 +171,8 @@ namespace SteamShutdown
             string[] content = File.ReadAllLines(filename);
 
             // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
-            if (content.Length == 1 && string.IsNullOrWhiteSpace(content[0].TrimStart('\0')))
+            // or file does not start with \"AppState\".
+            if (content.Length <= 1 || string.IsNullOrWhiteSpace(content[0].TrimStart('\0')) || !content[0].StartsWith("\"AppState\""))
             {
                 SteamShutdown.Log($"FileToAppInfo: {filename} only contained 0 bytes.");
                 return null;
@@ -278,7 +279,7 @@ namespace SteamShutdown
                     dynamic mountedNode = pathNode["mounted"];
                     if (mountedNode != null && mountedNode.ToString() != "1")
                         continue;
-                    
+
                     pathNode = pathNode["path"];
                 }
 
