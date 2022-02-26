@@ -112,7 +112,7 @@
       <OutputAssembly>$(OutputPath)SteamShutdown_Merged.exe</OutputAssembly>
     </PropertyGroup>
     <Message Text="MERGING: @(MergeAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />
-	<Exec Command="$(ILRepack) /ndebug /out:&quot;$(OutputAssembly)&quot; @(MergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
+    <Exec Command="$(ILRepack) /ndebug /out:&quot;$(OutputAssembly)&quot; @(MergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
