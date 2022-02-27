@@ -256,6 +256,8 @@ namespace SteamShutdown
                 };
 
             string libraryFoldersPath = Path.Combine(installationPath, "SteamApps", "libraryfolders.vdf");
+            if (!File.Exists(libraryFoldersPath))
+                return paths.ToArray();
 
             string json = AcfToJson(File.ReadAllLines(libraryFoldersPath));
 
