@@ -1,0 +1,38 @@
+Kill #,Timestamp,Bot,Weapon,TTK,Shots,Hits,Accuracy,Damage Done,Damage Possible,Efficiency,Cheated
+
+Weapon,Shots,Hits,Damage Done,Damage Possible,,Sens Scale,Horiz Sens,Vert Sens,FOV,Hide Gun,Crosshair,Crosshair Scale,Crosshair Color,ADS Sens,ADS Zoom Scale
+LG,1302,593,3558.0,7812.0,
+
+Kills:,0
+Deaths:,0
+Fight Time:,0.0
+Avg TTK:,0
+Damage Done:,3558.0
+Damage Taken:,0.0
+Midairs:,0
+Midaired:,0
+Directs:,0
+Directed:,0
+Reloads:,0
+Distance Traveled:,0.0
+Score:,10674.0
+Scenario:,MFSI rAim
+Hash:,28af13e2ec2a8a5b9953cda565c9eefb
+Game Version:,2.0.5.2
+Challenge Start:,11:14:12.555
+Pause Count:,36
+Pause Duration:,733
+
+Input Lag:,0
+Max FPS (config):,0.0
+Sens Scale:,Reflex
+Horiz Sens:,4.0
+Vert Sens:,4.0
+FOV:,103.0
+Hide Gun:,false
+Crosshair:,aimbeastM.png
+Crosshair Scale:,0.6
+Crosshair Color:,009C6C
+Resolution,1920x1080
+Avg FPS,646.252747
+Resolution Scale,100.0

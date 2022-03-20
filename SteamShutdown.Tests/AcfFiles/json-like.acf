@@ -1,0 +1,25 @@
+{
+	"manifest" : {
+		"__type" : "CsContentPack,CS_Models",
+		"value" : {
+			"publishedFileId_t" : 2499719423,
+			"isUnpacked" : false,
+			"collection" : {
+				"metadata" : {
+					"id" : "bcf405e4-c09c-427a-b3c5-7881853a504c",
+					"label" : "Icebox - Blank Template",
+					"category" : "ContentPack",
+					"author" : "ApexFrogPredator",
+					"description" : "An empty template of the Map \"Icebox\", from the game \"Valorant\"\r\n\r\nThis map is not intended as a playable task and does not contain any targets - It is intended as a tool for creators to use when building their own maps.\r\n\r\nMap Specific Properties -\r\n\r\nValorant Movement Speed (Light Pistol)",
+					"imagePath" : "\/icon.png",
+					"createDate" : "1622154107",
+					"lastModified" : "1622154107",
+					"levelVersion" : null,
+					"size" : null,
+					"authorId" : "AE64AFD4EFB4E7F9",
+					"authorSteamId" : "76561199098357977",
+					"ancestors" : null
+				},
+				"contentMap" : {"CsLevel.ApexFrogPredator.Icebox -.QTSE2M":{
+						"id" : "CsLevel.ApexFrogPredator.Icebox -.QTSE2M",
+						"label" : "Icebox - Blank Template

@@ -78,10 +78,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AcfFiles\csv.acf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="AcfFiles\appmanifest_213670.acf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="AcfFiles\corrupted.acf">
+    <None Include="AcfFiles\json-like.acf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="AcfFiles\random-binary.acf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="AcfFiles\nulls.acf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="AcfFiles\appmanifest_286080.acf">
