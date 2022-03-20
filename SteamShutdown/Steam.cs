@@ -279,9 +279,7 @@ namespace SteamShutdown
                 }
 
                 string path = Path.Combine(pathNode.ToString(), "SteamApps");
-
-                if (Directory.Exists(path))
-                    paths.Add(path);
+                paths.Add(path);
             }
 
             return paths.ToArray();
@@ -298,7 +296,9 @@ namespace SteamShutdown
             if (!File.Exists(libraryFoldersPath))
                 return paths.ToArray();
 
-            paths.AddRange(InstallationPathsFromVdf(libraryFoldersPath));
+            string[] readLibraryFolderPaths = InstallationPathsFromVdf(libraryFoldersPath);
+            string[] existingLibraryFolderPaths = readLibraryFolderPaths.Where(Directory.Exists).ToArray();
+            paths.AddRange(existingLibraryFolderPaths);
             return paths.ToArray();
         }
 
