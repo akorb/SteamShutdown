@@ -7,37 +7,52 @@ namespace SteamShutdown.Tests
     public class IsDownloadingTests
     {
         [TestMethod]
-        public void TestDownloadingStates()
+        public void Downloading_6()
         {
-            int[] downloadingStates =
-            {
-                6,
-                1026,
-                1030,
-                1042,
-                1044,
-                1062,
-            };
-
-            foreach (int state in downloadingStates)
-            {
-                Assert.IsTrue(CheckDownloading(state), $"State {state} was erroneously detected as not downloading.");
-            }
+            Assert.IsTrue(CheckDownloading(6));
         }
 
         [TestMethod]
-        public void TestNotDownloadingStates()
+        public void Downloading_1026()
         {
-            int[] downloadingStates =
-            {
-                4,
-                70,
-            };
+            Assert.IsTrue(CheckDownloading(1026));
+        }
 
-            foreach (int state in downloadingStates)
-            {
-                Assert.IsFalse(CheckDownloading(state), $"State {state} was erroneously detected as downloading.");
-            }
+        [TestMethod]
+        public void Downloading_1030()
+        {
+            Assert.IsTrue(CheckDownloading(1030));
+        }
+
+        [TestMethod]
+        public void Downloading_1042()
+        {
+            Assert.IsTrue(CheckDownloading(1042));
+        }
+
+        [TestMethod]
+        public void Downloading_1044()
+        {
+            Assert.IsTrue(CheckDownloading(1044));
+        }
+
+        [TestMethod]
+        public void Downloading_1062()
+        {
+            Assert.IsTrue(CheckDownloading(1062));
+        }
+
+
+        [TestMethod]
+        public void NotDownloading_4()
+        {
+            Assert.IsFalse(CheckDownloading(4));
+        }
+
+        [TestMethod]
+        public void NotDownloading_70()
+        {
+            Assert.IsFalse(CheckDownloading(70));
         }
     }
 }
