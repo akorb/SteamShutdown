@@ -9,22 +9,22 @@ namespace SteamShutdown.Tests
         public void AppInfoTests()
         {
             App ai = Steam.FileToAppInfo("AcfFiles\\appmanifest_213670.acf");
-            Assert.AreEqual(ai.ID, 213670);
-            Assert.AreEqual(ai.Name, "South Park™: The Stick of Truth™");
-            Assert.AreEqual(ai.State, 4);
+            Assert.AreEqual(213670, ai.ID);
+            Assert.AreEqual("South Park™: The Stick of Truth™", ai.Name);
+            Assert.AreEqual(4, ai.State);
 
             ai = Steam.FileToAppInfo("AcfFiles\\corrupted.acf");
-            Assert.AreEqual(ai, null);
+            Assert.AreEqual(null, ai);
 
             ai = Steam.FileToAppInfo("AcfFiles\\appmanifest_286080.acf");
-            Assert.AreEqual(ai.ID, 286080);
-            Assert.AreEqual(ai.Name, "Thinking with Time Machine");
-            Assert.AreEqual(ai.State, 4);
+            Assert.AreEqual(286080, ai.ID);
+            Assert.AreEqual("Thinking with Time Machine", ai.Name);
+            Assert.AreEqual(4, ai.State);
 
             ai = Steam.FileToAppInfo("AcfFiles\\appmanifest_403640.acf");
-            Assert.AreEqual(ai.ID, 403640);
-            Assert.AreEqual(ai.Name, "Dishonored 2");
-            Assert.AreEqual(ai.State, 4);
+            Assert.AreEqual(403640, ai.ID);
+            Assert.AreEqual("Dishonored 2", ai.Name);
+            Assert.AreEqual(4, ai.State);
         }
     }
 }
