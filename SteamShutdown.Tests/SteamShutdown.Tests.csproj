@@ -70,6 +70,7 @@
     <Compile Include="AcfParsingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IsDownloadingTests.cs" />
+    <Compile Include="VdfParsingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SteamShutdown\SteamShutdown.csproj">
@@ -100,6 +101,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="AcfFiles\empty.acf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="VdfFiles\old_format.vdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="VdfFiles\new_format_without_mounted.vdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="VdfFiles\new_format_with_mounted.vdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
