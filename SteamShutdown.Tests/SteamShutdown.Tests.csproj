@@ -67,8 +67,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest.cs" />
+    <Compile Include="AcfParsingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IsDownloadingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SteamShutdown\SteamShutdown.csproj">
