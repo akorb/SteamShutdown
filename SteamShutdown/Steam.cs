@@ -248,18 +248,11 @@ namespace SteamShutdown
             return sb.ToString();
         }
 
-        private static string[] GetLibraryPaths(string installationPath)
+        public static string[] InstallationPathsFromVdf(string vdfFile)
         {
-            List<string> paths = new List<string>()
-                {
-                    Path.Combine(installationPath, "SteamApps")
-                };
+            var paths = new List<string>();
 
-            string libraryFoldersPath = Path.Combine(installationPath, "SteamApps", "libraryfolders.vdf");
-            if (!File.Exists(libraryFoldersPath))
-                return paths.ToArray();
-
-            string json = AcfToJson(File.ReadAllLines(libraryFoldersPath));
+            string json = AcfToJson(File.ReadAllLines(vdfFile));
 
             dynamic rootNode = JsonConvert.DeserializeObject(json);
 
@@ -291,6 +284,21 @@ namespace SteamShutdown
                     paths.Add(path);
             }
 
+            return paths.ToArray();
+        }
+
+        private static string[] GetLibraryPaths(string installationPath)
+        {
+            var paths = new List<string>()
+                {
+                    Path.Combine(installationPath, "SteamApps")
+                };
+
+            string libraryFoldersPath = Path.Combine(installationPath, "SteamApps", "libraryfolders.vdf");
+            if (!File.Exists(libraryFoldersPath))
+                return paths.ToArray();
+
+            paths.AddRange(InstallationPathsFromVdf(libraryFoldersPath));
             return paths.ToArray();
         }
 
