@@ -94,7 +94,7 @@ namespace SteamShutdown
                     // Add an Accept header for JSON format.
                     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
                     // User-Agent is necessary for the GitHub api
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0");
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0");
 
                     // Blocking call. Program will wait here until a response is received or a timeout occurs.
                     HttpResponseMessage response = client.GetAsync(ur).Result;
