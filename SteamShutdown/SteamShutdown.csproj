@@ -65,7 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="ColorUtils.cs" />
     <Compile Include="CustomApplicationContext.cs" />
+    <Compile Include="DarkRenderer.cs" />
     <Compile Include="IPC.cs" />
     <Compile Include="Actions\Sleep.cs" />
     <Compile Include="Actions\Action.cs" />
