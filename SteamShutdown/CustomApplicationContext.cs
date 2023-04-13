@@ -171,10 +171,10 @@ namespace SteamShutdown
             };
             NotifyIcon.MouseUp += NotifyIcon_MouseUp;
             NotifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
-	    NotifyIcon.ContextMenuStrip.RenderMode = ToolStripRenderMode.Professional;
-	    if(!ColorUtils.SystemUsesLightTheme())
+            NotifyIcon.ContextMenuStrip.RenderMode = ToolStripRenderMode.Professional;
+            if (!ColorUtils.SystemUsesLightTheme())
                 NotifyIcon.ContextMenuStrip.Renderer = new DarkRenderer(ColorUtils.GetAccentColor());
-	    
+
             NotifyIcon.ShowBalloonTip(2000, "Hello", "You find me in the taskbar.", ToolTipIcon.Info);
         }
 

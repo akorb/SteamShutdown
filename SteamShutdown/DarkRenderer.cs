@@ -6,53 +6,57 @@ namespace SteamShutdown
 {
     internal class DarkColorTable : ProfessionalColorTable
     {
-        private Color _backColor = Color.FromArgb(43, 43, 43),
-                      _itemSelectedColor = Color.FromArgb(65, 65, 65),
-                      _borderColor = Color.FromArgb(128, 128, 128),
-                      _separatorColor = Color.FromArgb(128, 128, 128),
-                      _btnPressedColor = Color.FromArgb(110, 160, 230);
+        private readonly Color backColor = Color.FromArgb(43, 43, 43);
+        private readonly Color itemSelectedColor = Color.FromArgb(65, 65, 65);
+        private readonly Color borderColor = Color.FromArgb(128, 128, 128);
+        private readonly Color separatorColor = Color.FromArgb(128, 128, 128);
+        private readonly Color btnPressedColor = Color.FromArgb(110, 160, 230);
 
         //Border color
-        public override Color ToolStripBorder => _borderColor;
-        public override Color MenuBorder => _borderColor;
+        public override Color ToolStripBorder => borderColor;
+        public override Color MenuBorder => borderColor;
 
         //Background color
-        public override Color ToolStripDropDownBackground => _backColor;
-        public override Color MenuStripGradientBegin => _backColor;
-        public override Color MenuStripGradientEnd => _backColor;
-        public override Color CheckBackground => _backColor;
-        public override Color CheckSelectedBackground => _backColor;
-        public override Color CheckPressedBackground => _backColor;
-        public override Color ImageMarginGradientBegin => _backColor;
-        public override Color ImageMarginGradientMiddle => _backColor;
-        public override Color ImageMarginGradientEnd => _backColor;
+        public override Color ToolStripDropDownBackground => backColor;
+        public override Color MenuStripGradientBegin => backColor;
+        public override Color MenuStripGradientEnd => backColor;
+        public override Color CheckBackground => backColor;
+        public override Color CheckSelectedBackground => backColor;
+        public override Color CheckPressedBackground => backColor;
+        public override Color ImageMarginGradientBegin => backColor;
+        public override Color ImageMarginGradientMiddle => backColor;
+        public override Color ImageMarginGradientEnd => backColor;
 
-        //Seperator color
-        public override Color SeparatorDark => _separatorColor;
-        public override Color SeparatorLight => _separatorColor;
+        //Separator color
+        public override Color SeparatorDark => separatorColor;
+        public override Color SeparatorLight => separatorColor;
 
         //MenuItem selected color
-        public override Color MenuItemSelected => _itemSelectedColor;
-        public override Color MenuItemBorder => _itemSelectedColor;
+        public override Color MenuItemSelected => itemSelectedColor;
+        public override Color MenuItemBorder => itemSelectedColor;
 
         //Item pressed color
-        public override Color ButtonPressedBorder => _btnPressedColor;
-        public override Color ButtonPressedGradientBegin => _btnPressedColor;
-        public override Color ButtonPressedGradientMiddle => _btnPressedColor;
-        public override Color ButtonPressedGradientEnd => _btnPressedColor;
+        public override Color ButtonPressedBorder => btnPressedColor;
+        public override Color ButtonPressedGradientBegin => btnPressedColor;
+        public override Color ButtonPressedGradientMiddle => btnPressedColor;
+        public override Color ButtonPressedGradientEnd => btnPressedColor;
 
         //StatusStrip color
-        public override Color StatusStripGradientBegin => _backColor;
-        public override Color StatusStripGradientEnd => _backColor;
+        public override Color StatusStripGradientBegin => backColor;
+        public override Color StatusStripGradientEnd => backColor;
     }
 
+    /// <summary>
+    /// The DarkRenderer is used to render the context menu strip with darkmode friendly styling.
+    /// Applying the renderer by using the ToolStrip.Renderer property results in a dark context menu.
+    /// </summary>
     public class DarkRenderer : ToolStripProfessionalRenderer
     {
-        private Color _accentColor;
+        private readonly Color accentColor;
 
         public DarkRenderer(Color accentColor) : base(new DarkColorTable())
         {
-            _accentColor = accentColor;
+            this.accentColor = accentColor;
         }
 
         //Make sure the text is rendered with white text color
@@ -82,30 +86,33 @@ namespace SteamShutdown
         //Rendering the checkmark and its surrounding box
         protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            if (e != null)
+            if (e == null)
             {
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                var rectImage = new Rectangle(e.ImageRectangle.Location, e.ImageRectangle.Size);
-                rectImage.X += 4;
-                //rectImage.Inflate(-1, -1);
-
-                using (var p = new Pen(_accentColor, 1))
-                    e.Graphics.DrawRectangle(p, rectImage);
-
-                rectImage.Width -= 6;
-                rectImage.Height -= 8;
-
-                rectImage.X += 3;
-                rectImage.Y += 4;
-
-                using (var p = new Pen(Color.White, 1))
-                {
-                    e.Graphics.DrawLines(p, new Point[] { new Point(rectImage.Left, rectImage.Bottom - (int)(rectImage.Height / 2)), new Point(rectImage.Left + (int)(rectImage.Width / 3), rectImage.Bottom), new Point(rectImage.Right, rectImage.Top) });
-                }
-            }
-            else
                 base.OnRenderItemCheck(e);
+                return;
+            }
+
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            var rectImage = new Rectangle(e.ImageRectangle.Location, e.ImageRectangle.Size);
+            rectImage.X += 4;
+
+            using (var p = new Pen(accentColor, 1))
+                e.Graphics.DrawRectangle(p, rectImage);
+
+            rectImage.Width -= 6;
+            rectImage.Height -= 8;
+
+            rectImage.X += 3;
+            rectImage.Y += 4;
+
+            using (var p = new Pen(Color.White, 1))
+            {
+                e.Graphics.DrawLines(p, new Point[] {
+                    new Point(rectImage.Left, rectImage.Bottom - rectImage.Height / 2),
+                    new Point(rectImage.Left + rectImage.Width / 3, rectImage.Bottom),
+                    new Point(rectImage.Right, rectImage.Top) });
+            }
         }
     }
 }
