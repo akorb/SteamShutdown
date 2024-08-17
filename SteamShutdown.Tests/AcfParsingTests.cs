@@ -14,6 +14,7 @@ namespace SteamShutdown.Tests
             Assert.AreEqual(4, ai.State);
         }
 
+        [TestMethod]
         public void Valid2()
         {
             App ai = Steam.FileToAppInfo("AcfFiles\\appmanifest_286080.acf");
@@ -32,38 +33,45 @@ namespace SteamShutdown.Tests
         }
 
         [TestMethod]
+        public void Incomplete()
+        {
+            App ai = Steam.FileToAppInfo("AcfFiles\\incomplete.acf");
+            Assert.IsNull(ai);
+        }
+
+        [TestMethod]
         public void CorruptNulls()
         {
             App ai = Steam.FileToAppInfo("AcfFiles\\nulls.acf");
-            Assert.AreEqual(null, ai);
+            Assert.IsNull(ai);
         }
 
         [TestMethod]
         public void CorruptEmpty()
         {
             App ai = Steam.FileToAppInfo("AcfFiles\\empty.acf");
-            Assert.AreEqual(null, ai);
+            Assert.IsNull(ai);
         }
 
         [TestMethod]
         public void CorruptJsonLike()
         {
             App ai = Steam.FileToAppInfo("AcfFiles\\json-like.acf");
-            Assert.AreEqual(null, ai);
+            Assert.IsNull(ai);
         }
 
         [TestMethod]
         public void CorruptRandomBinary()
         {
             App ai = Steam.FileToAppInfo("AcfFiles\\random-binary.acf");
-            Assert.AreEqual(null, ai);
+            Assert.IsNull(ai);
         }
 
         [TestMethod]
         public void CorruptCsv()
         {
             App ai = Steam.FileToAppInfo("AcfFiles\\csv.acf");
-            Assert.AreEqual(null, ai);
+            Assert.IsNull(ai);
         }
     }
 }

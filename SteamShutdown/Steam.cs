@@ -172,14 +172,24 @@ namespace SteamShutdown
 
             // Skip if file contains only NULL bytes (this can happen sometimes, example: download crashes, resulting in a corrupted file)
             // or file does not start with \"AppState\".
-            if (content.Length <= 1 || string.IsNullOrWhiteSpace(content[0].TrimStart('\0')) || !content[0].StartsWith("\"AppState\""))
+            if (content.Length <= 1 || !content[0].StartsWith("\"AppState\""))
             {
-                SteamShutdown.Log($"FileToAppInfo: {filename} only contained 0 bytes.");
+                SteamShutdown.Log($"FileToAppInfo: {filename} is corrupt.");
                 return null;
             }
 
             string json = AcfToJson(content);
-            dynamic stuff = JsonConvert.DeserializeObject(json);
+            dynamic stuff;
+            try
+            {
+                stuff = JsonConvert.DeserializeObject(json);
+            }
+            catch (JsonSerializationException ex)
+            {
+                SteamShutdown.Log($"FileToAppInfo: Failed to deserialize {filename}");
+                SteamShutdown.Log(ex.ToString());
+                return null;
+            }
 
             if (stuff == null)
             {

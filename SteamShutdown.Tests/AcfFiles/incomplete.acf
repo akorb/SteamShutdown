@@ -1,0 +1,35 @@
+"AppState"
+{
+	"appID"		"403640"
+	"Universe"		"1"
+	"name"		"Dishonored 2"
+	"StateFlags"		"4"
+	"installdir"		"Dishonored2"
+	"LastUpdated"		"1481045342"
+	"UpdateResult"		"0"
+	"SizeOnDisk"		"41929504384"
+	"buildid"		"1485207"
+	"LastOwner"		"76561198030640421"
+	"BytesToDownload"		"315046832"
+	"BytesDownloaded"		"315046832"
+	"AutoUpdateBehavior"		"0"
+	"AllowOtherDownloadsWhileRunning"		"0"
+	"UserConfig"
+	{
+		"language"		"german"
+	}
+	"MountedDepots"
+	{
+		"228984"		"3215975441341951460"
+		"228990"		"1829726630299308803"
+		"531614"		"5384540159708341227"
+		"531331"		"3648551351998507887"
+		"531332"		"790367271621123554"
+		"531333"		"6166897531797433164"
+		"531335"		"262298863289264886"
+	}
+	"InstallScripts"
+	{
+		"0"		"_CommonRedist\\vcredist\\2012\\installscript.vdf"
+		"1"		"_CommonRedist\\DirectX\\Jun2010\\installscript.vdf"
+	}

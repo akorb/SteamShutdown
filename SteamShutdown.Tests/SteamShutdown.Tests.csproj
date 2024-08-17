@@ -79,6 +79,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AcfFiles\incomplete.acf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="AcfFiles\csv.acf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
