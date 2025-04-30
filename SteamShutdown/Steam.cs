@@ -18,7 +18,7 @@ namespace SteamShutdown
 
         public static List<App> Apps { get; private set; } = new List<App>();
 
-        static List<FileSystemWatcher> fswList;
+        static readonly List<FileSystemWatcher> fswList;
 
         const string STEAM_REG_VALUE = "InstallPath";
 
@@ -56,12 +56,14 @@ namespace SteamShutdown
                     Environment.Exit(0);
                 }
 
-                FolderBrowserDialog fbd = new FolderBrowserDialog();
-                fbd.Description = "Your steam folder could not be automatically detected."
-                    + Environment.NewLine
-                    + "Please select the root of your steam folder."
-                    + Environment.NewLine
-                    + "Example: " + @"C:\Program Files (x86)\Steam";
+                FolderBrowserDialog fbd = new FolderBrowserDialog
+                {
+                    Description = "Your steam folder could not be automatically detected."
+                        + Environment.NewLine
+                        + "Please select the root of your steam folder."
+                        + Environment.NewLine
+                        + "Example: " + @"C:\Program Files (x86)\Steam"
+                };
                 DialogResult re = fbd.ShowDialog();
                 if (re != DialogResult.OK) return;
                 installationPath = fbd.SelectedPath;
